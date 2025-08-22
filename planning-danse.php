@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Planning Danse En Mouvance
  * Description: Affiche le planning hebdomadaire des cours de danse depuis Google Sheets
- * Version: 1.5
+ * Version: 1.6
  * Author: Benga
  */
 
@@ -219,7 +219,6 @@ class PlanningDansePlugin {
     
     // Nouvelle méthode pour ajouter les éléments de réservation
     public function add_booking_elements() {
-        remove_action('wp_footer', array($this, 'add_booking_elements'));
         ?>
         <div class="booking-cart">
             <div class="cart-header">
@@ -2511,31 +2510,31 @@ jQuery(document).ready(function($) {
     }
 
     $css = "
-    .planning-container {
+    .planning-danse-plugin-wrapper .planning-container {
         background: {$interface_colors['background']};
     }
-    .planning-table {
+    .planning-danse-plugin-wrapper .planning-table {
         background: {$interface_colors['background']};
     }
-    .planning-table th {
+    .planning-danse-plugin-wrapper .planning-table th {
         background-color: {$interface_colors['header_bg']};
     }
-    .time-cell {
+    .planning-danse-plugin-wrapper .time-cell {
         background-color: {$interface_colors['time_cell_bg']};
         color: {$interface_colors['time_cell_text']};
     }
-    .empty-cell {
+    .planning-danse-plugin-wrapper .empty-cell {
         background-color: {$interface_colors['empty_cell']};
     }
-    .ribbon {
+    .planning-danse-plugin-wrapper .ribbon {
         background-color: {$ribbon_colors['background']};
         color: {$ribbon_colors['text']};
     }
-    .ribbon:before,
-    .ribbon:after {
+    .planning-danse-plugin-wrapper .ribbon:before,
+    .planning-danse-plugin-wrapper .ribbon:after {
         border-top-color: {$ribbon_colors['corners']};
     }
-    .teacher-name-wrapper {
+    .planning-danse-plugin-wrapper .teacher-name-wrapper {
         position: absolute;
         bottom: 5px;
         right: 8px;
@@ -2545,7 +2544,7 @@ jQuery(document).ready(function($) {
         padding: 2px 6px;
         border-radius: 4px;
     }
-    .teacher-photo-wrapper.with-name {
+    .planning-danse-plugin-wrapper .teacher-photo-wrapper.with-name {
         display: flex;
         align-items: center;
         gap: 5px;
@@ -2554,7 +2553,7 @@ jQuery(document).ready(function($) {
         right: 5px;
         z-index: 20;
     }
-    .teacher-photo-wrapper.with-name .teacher-firstname-label {
+    .planning-danse-plugin-wrapper .teacher-photo-wrapper.with-name .teacher-firstname-label {
         font-size: 0.9em;
         font-weight: 500;
     }
@@ -2621,348 +2620,336 @@ jQuery(document).ready(function($) {
         $filter_menu = $this->generate_filter_menu();
 
         ob_start();
-        $this->add_booking_elements();
         ?>
-        <div class="planning-container">
-            <div class="planning-header">
-                <?php echo $filter_menu; ?>
-                
-            </div>
-            
+        <div class="planning-danse-plugin-wrapper">
+            <?php $this->add_booking_elements(); ?>
+            <div class="planning-container">
+                <div class="planning-header">
+                    <?php echo $filter_menu; ?>
+                </div>
+                <div class="planning-body">
+                    <table class="planning-table">
+                        <thead>
+                            <tr class="days-row">
+                                <th class="time-header"></th>
+                                <?php foreach (['LUNDI', 'MARDI', 'MERCREDI', 'JEUDI', 'VENDREDI', 'SAMEDI'] as $day) : ?>
+                            <th colspan="2" data-day="<?php echo strtolower($day); ?>"><?php echo $day; ?></th>
+                                <?php endforeach; ?>
+                            </tr>
+                            <tr class="studios-row">
+                                <th class="studio-row-first"></th>
+                                <?php for ($i = 0; $i < 6; $i++) : ?>
+                                    <?php $dayLower = strtolower(['LUNDI', 'MARDI', 'MERCREDI', 'JEUDI', 'VENDREDI', 'SAMEDI'][$i]); ?>
+                                    <th data-day="<?php echo $dayLower; ?>">STUDIO 1</th>
+                                    <th data-day="<?php echo $dayLower; ?>">STUDIO 2</th>
+                                <?php endfor; ?>
+                            </tr>
+                        </thead>
+                        <?php
+                        foreach ($this->timeSlots as $time) {
+                            // Trouver l'index de la ligne correspondante
+                            $rowIndex = -1;
+                            foreach ($data as $index => $row) {
+                                if (isset($row[0]) && $row[0] === $time) {
+                                    $rowIndex = $index;
+                                    break;
+                                }
+                            }
         
-            <div class="planning-body">
-                <table class="planning-table">
-                    <thead>
-                        <tr class="days-row">
-                            <th class="time-header"></th>
-                            <?php foreach (['LUNDI', 'MARDI', 'MERCREDI', 'JEUDI', 'VENDREDI', 'SAMEDI'] as $day) : ?>
-                        <th colspan="2" data-day="<?php echo strtolower($day); ?>"><?php echo $day; ?></th>
-                            <?php endforeach; ?>
-                        </tr>
-                        <tr class="studios-row">
-                            <th class="studio-row-first"></th>
-                            <?php for ($i = 0; $i < 6; $i++) : ?>
-                                <?php $dayLower = strtolower(['LUNDI', 'MARDI', 'MERCREDI', 'JEUDI', 'VENDREDI', 'SAMEDI'][$i]); ?>
-                                <th data-day="<?php echo $dayLower; ?>">STUDIO 1</th>
-                                <th data-day="<?php echo $dayLower; ?>">STUDIO 2</th>
-                            <?php endfor; ?>
-                        </tr>
-                    </thead>
-                    <?php
-                    foreach ($this->timeSlots as $time) {
-                        // Trouver l'index de la ligne correspondante
-                        $rowIndex = -1;
-                        foreach ($data as $index => $row) {
-                            if (isset($row[0]) && $row[0] === $time) {
-                                $rowIndex = $index;
-                                break;
-                            }
-                        }
-    
-                        echo "<tr>";
-                        echo "<td class='time-cell'>$time</td>";
-    
-                        // Pour chaque studio (12 colonnes)
-                        // Pour chaque studio (12 colonnes)
-                        for ($col = 1; $col <= 12; $col++) {
-                            // Si cette cellule fait partie d'un cours précédent
-                            if ($skipCells[$col-1] > 0) {
-                                $skipCells[$col-1]--;
-                                continue;
-                            }
-                        
-                            if ($rowIndex !== -1 && isset($data[$rowIndex][$col]) && !empty(trim($data[$rowIndex][$col]))) {
-                                // On a trouvé un cours
-                                $content = trim($data[$rowIndex][$col]);
-                                
-                                // Calculer le nombre de créneaux depuis le timing
-                                $rowspan = $this->getDuration($content);
-                                
-                                // Marquer les cellules à sauter
-                                if ($rowspan > 1) {
-                                    $skipCells[$col-1] = $rowspan - 1;
+                            echo "<tr>";
+                            echo "<td class='time-cell'>$time</td>";
+        
+                            // Pour chaque studio (12 colonnes)
+                            for ($col = 1; $col <= 12; $col++) {
+                                // Si cette cellule fait partie d'un cours précédent
+                                if ($skipCells[$col-1] > 0) {
+                                    $skipCells[$col-1]--;
+                                    continue;
                                 }
-                        
-                                $color_class = $this->get_color_class($content);
-                                $category = $this->get_category_info($content); 
-                                $tooltip_attr = '';
-                        
-                                if ($category && 
-                                    isset($category['tooltip_enabled']) && 
-                                    $category['tooltip_enabled'] && 
-                                    !empty($category['tooltip_text'])) {
-                                    $tooltip_attr = ' data-category-tooltip="' . esc_attr($category['tooltip_text']) . '"';
+                            
+                                if ($rowIndex !== -1 && isset($data[$rowIndex][$col]) && !empty(trim($data[$rowIndex][$col]))) {
+                                    // On a trouvé un cours
+                                    $content = trim($data[$rowIndex][$col]);
+                                    
+                                    // Calculer le nombre de créneaux depuis le timing
+                                    $rowspan = $this->getDuration($content);
+                                    
+                                    // Marquer les cellules à sauter
+                                    if ($rowspan > 1) {
+                                        $skipCells[$col-1] = $rowspan - 1;
+                                    }
+                            
+                                    $color_class = $this->get_color_class($content);
+                                    $category = $this->get_category_info($content); 
+                                    $tooltip_attr = '';
+                            
+                                    if ($category && 
+                                        isset($category['tooltip_enabled']) && 
+                                        $category['tooltip_enabled'] && 
+                                        !empty($category['tooltip_text'])) {
+                                        $tooltip_attr = ' data-category-tooltip="' . esc_attr($category['tooltip_text']) . '"';
+                                    }
+                            
+                                    $dayIndex = floor(($col - 1) / 2);
+                                    $days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+                                    $currentDay = $days[$dayIndex];
+                                
+                                    echo "<td class='course $color_class' rowspan='$rowspan' data-col='$col' data-day='$currentDay' $tooltip_attr>";
+                                    echo $this->format_course_content($content, $col);
+                                    echo "</td>";
+                                } else {
+                                    $dayIndex = floor(($col - 1) / 2);
+                                    $days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+                                    $currentDay = $days[$dayIndex];
+                                
+                                    echo "<td class='empty-cell' data-day='$currentDay'></td>";
                                 }
-                        
-                                $dayIndex = floor(($col - 1) / 2);
-                                $days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-                                $currentDay = $days[$dayIndex];
-                            
-                                echo "<td class='course $color_class' rowspan='$rowspan' data-col='$col' data-day='$currentDay' $tooltip_attr>";
-                                echo $this->format_course_content($content, $col);
-                                echo "</td>";
-                            } else {
-                                $dayIndex = floor(($col - 1) / 2);
-                                $days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-                                $currentDay = $days[$dayIndex];
-                            
-                                echo "<td class='empty-cell' data-day='$currentDay'></td>";
                             }
+                            echo "</tr>";
                         }
-                        echo "</tr>";
-                    }
-                    ?>
-                </table>
+                        ?>
+                    </table>
+                </div>
             </div>
-        </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        // Script de synchronisation du scroll horizontal
-        const planningBody = document.querySelector('.planning-body');
-        const planningHeaders = document.querySelector('.planning-headers');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            // Script de synchronisation du scroll horizontal
+            const planningBody = document.querySelector('.planning-danse-plugin-wrapper .planning-body');
+            const planningHeaders = document.querySelector('.planning-danse-plugin-wrapper .planning-headers');
+            
+            if (planningBody && planningHeaders) {
+                planningBody.addEventListener('scroll', function() {
+                    planningHeaders.scrollLeft = this.scrollLeft;
+                });
         
-        if (planningBody && planningHeaders) {
-            planningBody.addEventListener('scroll', function() {
-                planningHeaders.scrollLeft = this.scrollLeft;
-            });
-    
-            planningHeaders.addEventListener('scroll', function() {
-                planningBody.scrollLeft = this.scrollLeft;
-            });
-        }
-    
-        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        const courses = document.querySelectorAll('.course');
-        let activeElement = null;
-    
-        // Gestionnaire pour le tap sur un cours
-        document.addEventListener('click', function(event) {
-            const course = event.target.closest('.course');
-            
-            // Si on clique sur un bouton ou un lien, laisser le comportement par défaut
-            if (event.target.matches('button') || event.target.matches('a')) {
-                return;
+                planningHeaders.addEventListener('scroll', function() {
+                    planningBody.scrollLeft = this.scrollLeft;
+                });
             }
-    
-            // Ignorer les clics sur les éléments du professeur
-            if (event.target.closest('.teacher-link')) {
-                return;
-            }
-            
-            // Si on clique en dehors d'un cours, désactiver tout
-            if (!course) {
-                if (activeElement) {
-                    activeElement.classList.remove('touch-active');
+        
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const courses = document.querySelectorAll('.planning-danse-plugin-wrapper .course');
+            let activeElement = null;
+        
+            // Gestionnaire pour le tap sur un cours
+            document.addEventListener('click', function(event) {
+                const course = event.target.closest('.planning-danse-plugin-wrapper .course');
+                
+                // Si on clique sur un bouton ou un lien, laisser le comportement par défaut
+                if (event.target.matches('button') || event.target.matches('a')) {
+                    return;
+                }
+        
+                // Ignorer les clics sur les éléments du professeur
+                if (event.target.closest('.teacher-link')) {
+                    return;
+                }
+                
+                // Si on clique en dehors d'un cours, désactiver tout
+                if (!course) {
+                    if (activeElement) {
+                        activeElement.classList.remove('touch-active');
+                        activeElement = null;
+                    }
+                    document.querySelectorAll('.planning-danse-plugin-wrapper .teacher-link.touch-active')
+                        .forEach(el => el.classList.remove('touch-active'));
+                    return;
+                }
+        
+                // Toggle l'état actif du cours cliqué
+                if (course === activeElement) {
+                    course.classList.remove('touch-active');
                     activeElement = null;
+                } else {
+                    if (activeElement) {
+                        activeElement.classList.remove('touch-active');
+                    }
+                    course.classList.add('touch-active');
+                    activeElement = course;
                 }
-                document.querySelectorAll('.teacher-link.touch-active')
-                    .forEach(el => el.classList.remove('touch-active'));
-                return;
-            }
-    
-            // Toggle l'état actif du cours cliqué
-            if (course === activeElement) {
-                course.classList.remove('touch-active');
-                activeElement = null;
-            } else {
-                if (activeElement) {
-                    activeElement.classList.remove('touch-active');
-                }
-                course.classList.add('touch-active');
-                activeElement = course;
-            }
-        });
-    
-        // Gestionnaire spécifique pour les photos de professeurs
-        document.querySelectorAll('.teacher-link').forEach(teacherLink => {
-            teacherLink.addEventListener('click', function(event) {
-                // Si on clique sur le lien de profil, laisser le comportement par défaut
-                if (event.target.closest('.teacher-profile-link')) {
-                    return;
-                }
-                
-                // Empêcher la propagation pour ne pas déclencher le click du cours
-                event.stopPropagation();
-                
-                // Toggle le tooltip du professeur
-                this.classList.toggle('touch-active');
             });
-        });
-    
-        // Désactiver tous les éléments actifs au scroll
-        planningBody.addEventListener('scroll', function() {
-            if (activeElement) {
-                activeElement.classList.remove('touch-active');
-                activeElement = null;
-            }
-            document.querySelectorAll('.teacher-link.touch-active')
-                .forEach(el => el.classList.remove('touch-active'));
-        });
-    });
         
-        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    
-    if (isTouchDevice) {
-        const courses = document.querySelectorAll('.course');
-        let activeElement = null;
-    
-        // Gestionnaire spécifique pour les photos de professeurs
-        document.querySelectorAll('.teacher-link').forEach(teacherLink => {
-            teacherLink.addEventListener('click', function(event) {
-                // Si on clique sur le lien de profil, laisser le comportement par défaut
-                if (event.target.closest('.teacher-profile-link')) {
+            // Gestionnaire spécifique pour les photos de professeurs
+            document.querySelectorAll('.planning-danse-plugin-wrapper .teacher-link').forEach(teacherLink => {
+                teacherLink.addEventListener('click', function(event) {
+                    // Si on clique sur le lien de profil, laisser le comportement par défaut
+                    if (event.target.closest('.teacher-profile-link')) {
+                        return;
+                    }
+                    
+                    // Empêcher la propagation pour ne pas déclencher le click du cours
+                    event.stopPropagation();
+                    
+                    // Toggle le tooltip du professeur
+                    this.classList.toggle('touch-active');
+                });
+            });
+        
+            // Désactiver tous les éléments actifs au scroll
+            if(planningBody) {
+                planningBody.addEventListener('scroll', function() {
+                    if (activeElement) {
+                        activeElement.classList.remove('touch-active');
+                        activeElement = null;
+                    }
+                    document.querySelectorAll('.planning-danse-plugin-wrapper .teacher-link.touch-active')
+                        .forEach(el => el.classList.remove('touch-active'));
+                });
+            }
+        });
+            
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        if (isTouchDevice) {
+            const courses = document.querySelectorAll('.planning-danse-plugin-wrapper .course');
+            let activeElement = null;
+        
+            // Gestionnaire spécifique pour les photos de professeurs
+            document.querySelectorAll('.planning-danse-plugin-wrapper .teacher-link').forEach(teacherLink => {
+                teacherLink.addEventListener('click', function(event) {
+                    // Si on clique sur le lien de profil, laisser le comportement par défaut
+                    if (event.target.closest('.teacher-profile-link')) {
+                        return;
+                    }
+                    
+                    // Sinon empêcher la navigation
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    // Fermer le tooltip précédent s'il existe
+                    const previousActive = document.querySelector('.planning-danse-plugin-wrapper .teacher-link.touch-active');
+                    if (previousActive && previousActive !== this) {
+                        previousActive.classList.remove('touch-active');
+                    }
+                    
+                    // Toggle le tooltip actuel
+                    this.classList.toggle('touch-active');
+                });
+            });
+        
+            // Gestionnaire pour le tap sur un cours (sans inclure le tooltip professeur)
+            document.addEventListener('click', function(event) {
+                const course = event.target.closest('.planning-danse-plugin-wrapper .course');
+                
+                // Ignorer les clics sur les éléments du professeur
+                if (event.target.closest('.teacher-link')) {
                     return;
                 }
                 
-                // Sinon empêcher la navigation
+                // Si on clique en dehors d'un cours, on désactive tout
+                if (!course) {
+                    if (activeElement) {
+                        activeElement.classList.remove('touch-active');
+                        activeElement = null;
+                    }
+                    // Fermer aussi les tooltips de professeurs ouverts
+                    document.querySelectorAll('.planning-danse-plugin-wrapper .teacher-link.touch-active')
+                        .forEach(el => el.classList.remove('touch-active'));
+                    return;
+                }
+        
+                // Si on clique sur un lien ou un bouton dans le cours, on laisse le comportement normal
+                if (event.target.closest('a') || event.target.closest('button')) {
+                    return;
+                }
+        
                 event.preventDefault();
-                event.stopPropagation();
-                
-                // Fermer le tooltip précédent s'il existe
-                const previousActive = document.querySelector('.teacher-link.touch-active');
-                if (previousActive && previousActive !== this) {
-                    previousActive.classList.remove('touch-active');
-                }
-                
-                // Toggle le tooltip actuel
-                this.classList.toggle('touch-active');
-            });
-        });
-    
-        // Gestionnaire pour le tap sur un cours (sans inclure le tooltip professeur)
-        document.addEventListener('click', function(event) {
-            const course = event.target.closest('.course');
-            
-            // Ignorer les clics sur les éléments du professeur
-            if (event.target.closest('.teacher-link')) {
-                return;
-            }
-            
-            // Si on clique en dehors d'un cours, on désactive tout
-            if (!course) {
-                if (activeElement) {
+        
+                // Si on clique sur un cours différent, on désactive l'ancien
+                if (activeElement && activeElement !== course) {
                     activeElement.classList.remove('touch-active');
-                    activeElement = null;
                 }
-                // Fermer aussi les tooltips de professeurs ouverts
-                document.querySelectorAll('.teacher-link.touch-active')
-                    .forEach(el => el.classList.remove('touch-active'));
-                return;
+        
+                // Toggle l'état actif du cours cliqué
+                if (course === activeElement) {
+                    course.classList.remove('touch-active');
+                    activeElement = null;
+                } else {
+                    course.classList.add('touch-active');
+                    activeElement = course;
+                }
+            });
+        
+            // Désactiver tous les éléments actifs quand on scroll
+            const planningBodyScroll = document.querySelector('.planning-danse-plugin-wrapper .planning-body');
+            if(planningBodyScroll) {
+                planningBodyScroll.addEventListener('scroll', function() {
+                    if (activeElement) {
+                        activeElement.classList.remove('touch-active');
+                        activeElement = null;
+                    }
+                    document.querySelectorAll('.planning-danse-plugin-wrapper .teacher-link.touch-active')
+                        .forEach(el => el.classList.remove('touch-active'));
+                });
             }
-    
-            // Si on clique sur un lien ou un bouton dans le cours, on laisse le comportement normal
-            if (event.target.closest('a') || event.target.closest('button')) {
-                return;
-            }
-    
-            event.preventDefault();
-    
-            // Si on clique sur un cours différent, on désactive l'ancien
-            if (activeElement && activeElement !== course) {
-                activeElement.classList.remove('touch-active');
-            }
-    
-            // Toggle l'état actif du cours cliqué
-            if (course === activeElement) {
-                course.classList.remove('touch-active');
-                activeElement = null;
+        }
+        
+        // Ajuster le z-index pour les tooltips sur mobile
+        document.querySelectorAll('.planning-danse-plugin-wrapper .course').forEach(course => {
+            const updateZIndex = () => {
+                const allCourses = document.querySelectorAll('.planning-danse-plugin-wrapper .course');
+                allCourses.forEach(c => c.style.zIndex = '1');
+                course.style.zIndex = '100';
+            };
+        
+            if (isTouchDevice) {
+                course.addEventListener('click', updateZIndex);
             } else {
-                course.classList.add('touch-active');
-                activeElement = course;
+                course.addEventListener('mouseenter', updateZIndex);
             }
         });
-    
-        // Désactiver tous les éléments actifs quand on scroll
-        document.querySelector('.planning-body').addEventListener('scroll', function() {
-            if (activeElement) {
-                activeElement.classList.remove('touch-active');
-                activeElement = null;
-            }
-            document.querySelectorAll('.teacher-link.touch-active')
-                .forEach(el => el.classList.remove('touch-active'));
-        });
-    }
-    
-    // Ajuster le z-index pour les tooltips sur mobile
-    document.querySelectorAll('.course').forEach(course => {
-        const updateZIndex = () => {
-            const allCourses = document.querySelectorAll('.course');
-            allCourses.forEach(c => c.style.zIndex = '1');
-            course.style.zIndex = '100';
-        };
-    
-        if (isTouchDevice) {
-            course.addEventListener('click', updateZIndex);
-        } else {
-            course.addEventListener('mouseenter', updateZIndex);
+        
+        function enableDragToScroll(element) {
+            let isDown = false;
+            let startX;
+            let startY;
+            let scrollLeft;
+            let scrollTop;
+        
+            element.addEventListener('mousedown', (e) => {
+                isDown = true;
+                element.style.cursor = 'grabbing';
+                startX = e.pageX - element.offsetLeft;
+                startY = e.pageY - element.offsetTop;
+                scrollLeft = element.scrollLeft;
+                scrollTop = element.scrollTop;
+            });
+        
+            element.addEventListener('mouseleave', () => {
+                isDown = false;
+                element.style.cursor = 'grab';
+            });
+        
+            element.addEventListener('mouseup', () => {
+                isDown = false;
+                element.style.cursor = 'grab';
+            });
+        
+            element.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - element.offsetLeft;
+                const y = e.pageY - element.offsetTop;
+                const walkX = (x - startX) * 2;
+                const walkY = (y - startY) * 2;
+                element.scrollLeft = scrollLeft - walkX;
+                element.scrollTop = scrollTop - walkY;
+            });
         }
-    });
-    
-    // Ajuster le z-index pour les tooltips sur mobile
-    document.querySelectorAll('.course').forEach(course => {
-        const updateZIndex = () => {
-            const allCourses = document.querySelectorAll('.course');
-            allCourses.forEach(c => c.style.zIndex = '1');
-            course.style.zIndex = '100';
-        };
-    
-        if (isTouchDevice) {
-            course.addEventListener('click', updateZIndex);
-        } else {
-            course.addEventListener('mouseenter', updateZIndex);
-        }
-    });
-    
-    function enableDragToScroll(element) {
-        let isDown = false;
-        let startX;
-        let startY;
-        let scrollLeft;
-        let scrollTop;
-    
-        element.addEventListener('mousedown', (e) => {
-            isDown = true;
-            element.style.cursor = 'grabbing';
-            startX = e.pageX - element.offsetLeft;
-            startY = e.pageY - element.offsetTop;
-            scrollLeft = element.scrollLeft;
-            scrollTop = element.scrollTop;
+        
+        // Appliquer aux éléments scrollables
+        document.querySelectorAll('.planning-danse-plugin-wrapper .planning-headers, .planning-danse-plugin-wrapper .planning-body').forEach(el => {
+            el.style.cursor = 'grab';
+            enableDragToScroll(el);
+        
+            // Pour s'assurer que l'élément est scrollable verticalement si nécessaire
+            el.style.overflowY = 'auto';
         });
-    
-        element.addEventListener('mouseleave', () => {
-            isDown = false;
-            element.style.cursor = 'grab';
-        });
-    
-        element.addEventListener('mouseup', () => {
-            isDown = false;
-            element.style.cursor = 'grab';
-        });
-    
-        element.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - element.offsetLeft;
-            const y = e.pageY - element.offsetTop;
-            const walkX = (x - startX) * 2;
-            const walkY = (y - startY) * 2;
-            element.scrollLeft = scrollLeft - walkX;
-            element.scrollTop = scrollTop - walkY;
-        });
-    }
-    
-    // Appliquer aux éléments scrollables
-    document.querySelectorAll('.planning-headers, .planning-body').forEach(el => {
-        el.style.cursor = 'grab';
-        enableDragToScroll(el);
-    
-        // Pour s'assurer que l'élément est scrollable verticalement si nécessaire
-        el.style.overflowY = 'auto';
-    });
-    </script>
-    <?php
-    return ob_get_clean();
+        </script>
+        </div>
+        <?php
+        return ob_get_clean();
 }
 
     private function format_course_content($course, $col = 0) {
@@ -3150,7 +3137,7 @@ jQuery(document).ready(function($) {
         foreach ($categories as $slug => $category) {
             if (stripos($first_word, $category['name']) !== false) {
                 add_action('wp_footer', function() use ($slug, $category) {
-                    echo "<style>.course.$slug { background-color: {$category['bg']}; color: {$category['text']}; }</style>";
+                    echo "<style>.planning-danse-plugin-wrapper .course.$slug { background-color: {$category['bg']}; color: {$category['text']}; }</style>";
                 });
                 return $slug;
             }
@@ -3230,4 +3217,3 @@ jQuery(document).ready(function($) {
 
 // Initialisation du plugin
 new PlanningDansePlugin();
-
