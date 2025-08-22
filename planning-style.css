@@ -1,6 +1,5 @@
 /* Base styles */
-:root {
-
+.planning-danse-plugin-wrapper :root {
     --collumn-width: 200px;
     --time-collumn-width: 40px;
     --planning-min-width: 1800px;
@@ -9,9 +8,9 @@
     --planning-min-width-380: 380px;
 }
 
-.planning-container {
+.planning-danse-plugin-wrapper .planning-container {
     position: relative;
-   width: 100%;
+    width: 100%;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
@@ -19,15 +18,14 @@
     border-radius: 20px;
 }
 
-.planning-header {
+.planning-danse-plugin-wrapper .planning-header {
     padding: 20px 0px 0px 0px;
     z-index: 105;
 }
 
-
-.planning-table {
+.planning-danse-plugin-wrapper .planning-table {
     width: auto;
-     margin: 0 auto; /* Centre le tableau */
+    margin: 0 auto; /* Centre le tableau */
     border-collapse: separate;
     border-spacing: 3px;
     border:none !important;
@@ -36,74 +34,62 @@
     table-layout: fixed;
 }
 
-
-
-.planning-table th {
+.planning-danse-plugin-wrapper .planning-table th {
     padding: 5px!important;
-table-layout: fixed;
+    table-layout: fixed;
     text-align: center;
     font-weight: 500;
     font-size: 0.9em;
     letter-spacing: 0.5px;
     color: #ffffff !important;
     transition: background-color 0.3s ease;
-    
 }
 
-
-.planning-table .days-row th{
+.planning-danse-plugin-wrapper .planning-table .days-row th{
    font-size: 1.2em;
-    
 }
-
-
-
 
 /* Corps du planning */
-.planning-body {
+.planning-danse-plugin-wrapper .planning-body {
    overflow-x: auto !important; /* Ajout de !important */
-   
 }
 
-.planning-body::-webkit-scrollbar,
-.planning-headers::-webkit-scrollbar {
+.planning-danse-plugin-wrapper .planning-body::-webkit-scrollbar,
+.planning-danse-plugin-wrapper .planning-headers::-webkit-scrollbar {
     height: 10px; /* Hauteur de la scrollbar */
     background-color: #1a1a1a;
 }
-.planning-body::-webkit-scrollbar-thumb,
-.planning-headers::-webkit-scrollbar-thumb {
+.planning-danse-plugin-wrapper .planning-body::-webkit-scrollbar-thumb,
+.planning-danse-plugin-wrapper .planning-headers::-webkit-scrollbar-thumb {
     background: #6d6d6d; /* Couleur de la barre de défilement */
     border-radius: 4px;
 }
 
-.planning-body::-webkit-scrollbar-track,
-.planning-headers::-webkit-scrollbar-track {
+.planning-danse-plugin-wrapper .planning-body::-webkit-scrollbar-track,
+.planning-danse-plugin-wrapper .planning-headers::-webkit-scrollbar-track {
     background: #2a2a2a; /* Couleur du fond de la scrollbar */
 }
 
-.planning-body,
-.planning-headers {
+.planning-danse-plugin-wrapper .planning-body,
+.planning-danse-plugin-wrapper .planning-headers {
     scrollbar-width: thin;
     scrollbar-color: #cbcbcb #a3a3a3;
 }
 
 /* S'assurer que les largeurs des colonnes correspondent */
-
-
-.planning-table tr,
-.planning-table td {
+.planning-danse-plugin-wrapper .planning-table tr,
+.planning-danse-plugin-wrapper .planning-table td {
     transition: all 0.3s ease-in-out;
 }
 
 /* Cellules */
-.planning-table td {
+.planning-danse-plugin-wrapper .planning-table td {
     padding: 1px 5px !important;
     text-align: center;
     transition: background-color 0.3s ease;
 }
 
-.planning-table .time-cell {
-   
+.planning-danse-plugin-wrapper .planning-table .time-cell {
     font-size: 0.85em;
     white-space: nowrap;
     font-weight: 500;
@@ -113,26 +99,22 @@ table-layout: fixed;
     border:none !important;
 }
 
-.planning-table .time-cell, .planning-table .studio-row-first, .planning-table .time-header {
+.planning-danse-plugin-wrapper .planning-table .time-cell, 
+.planning-danse-plugin-wrapper .planning-table .studio-row-first, 
+.planning-danse-plugin-wrapper .planning-table .time-header {
     width: var(--time-collumn-width) !important;
-  width: var(--time-collumn-width) !important;
     min-width: var(--time-collumn-width) !important;
-    
     left: 0;
     z-index: 2;
 }
 
-
-
-
-
-.planning-table th:not(.time-header),
-.planning-table td:not(.time-cell) {
+.planning-danse-plugin-wrapper .planning-table th:not(.time-header),
+.planning-danse-plugin-wrapper .planning-table td:not(.time-cell) {
     width: var(--collumn-width) !important;
     min-width: var(--collumn-width) !important;
 }
 
-.planning-table .course {
+.planning-danse-plugin-wrapper .planning-table .course {
     padding: 4px 6px !important;
     vertical-align: middle;
     border-radius: 8px;
@@ -147,24 +129,23 @@ table-layout: fixed;
     overflow: visible !important;
 }
 
-.planning-table .course:hover {
+.planning-danse-plugin-wrapper .planning-table .course:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
     z-index:10;
 }
-.planning-table .course:hover .course-line {
+.planning-danse-plugin-wrapper .planning-table .course:hover .course-line {
     transform: translateY(-8px);
     transition: all 0.3s ease;
 }
 
-
-.course.hovered {
+.planning-danse-plugin-wrapper .course.hovered {
     z-index: 100;
 }
 
 /* Effet de brillance sur hover */
-.planning-table .course::after {
+.planning-danse-plugin-wrapper .planning-table .course::after {
     content: '';
     position: absolute;
     top: 0;
@@ -176,11 +157,11 @@ table-layout: fixed;
     transition: opacity 0.3s ease;
 }
 
-.planning-table .course:hover::after {
+.planning-danse-plugin-wrapper .planning-table .course:hover::after {
     opacity: 1;
 }
 
-.planning-table .course-line {
+.planning-danse-plugin-wrapper .planning-table .course-line {
     margin: 1px 0;
     font-size: 0.9em;
     line-height: 1.2;
@@ -188,21 +169,19 @@ table-layout: fixed;
     z-index: 1;
 }
 
-
-
-.planning-table .course-line:first-child {
+.planning-danse-plugin-wrapper .planning-table .course-line:first-child {
     font-weight: 600;
     font-size: 1em;
     font-size: 0.95em;
 }
 
-.planning-table .empty-cell {
+.planning-danse-plugin-wrapper .planning-table .empty-cell {
     border:none !important;
     transition: background-color 0.3s ease;
 }
 
-.planning-table td.hidden-day,
-.planning-table th.hidden-day {
+.planning-danse-plugin-wrapper .planning-table td.hidden-day,
+.planning-danse-plugin-wrapper .planning-table th.hidden-day {
     display: none !important;
     width: 0 !important;
     min-width: 0 !important;
@@ -210,33 +189,26 @@ table-layout: fixed;
     border: none !important;
 }
 
-
-.planning-table tr {
+.planning-danse-plugin-wrapper .planning-table tr {
     display: table-row;
     width: 100%;
 }
 
-.planning-table td,
-.planning-table th {
+.planning-danse-plugin-wrapper .planning-table td,
+.planning-danse-plugin-wrapper .planning-table th {
     border-collapse: collapse;
     box-sizing: border-box;
 }
 
 /* Maintenir l'alignement des colonnes */
-.planning-table td:not([data-day]),
-.planning-table th:not([data-day]) {
+.planning-danse-plugin-wrapper .planning-table td:not([data-day]),
+.planning-danse-plugin-wrapper .planning-table th:not([data-day]) {
     display: table-cell;
     visibility: visible !important;
 }
 
-/* Animation de chargement */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 /* Style du ruban COMPLET */
-.ribbon-wrapper {
+.planning-danse-plugin-wrapper .ribbon-wrapper {
     width: 110px;
     height: 110px;
     overflow: hidden;
@@ -246,36 +218,26 @@ table-layout: fixed;
     z-index: 15;
 }
 
-.ribbon {
+.planning-danse-plugin-wrapper .ribbon {
     font-size: 0.8em;
     font-weight: bold;
     text-transform: lowercase;
     text-align: center;
     letter-spacing: 0.5px;
     line-height: 20px;
-    
-    /* Couleur du ruban */
     background-color: #ff0000;
     color: white;
-    
-    /* Positionnement et rotation */
     width: 90px;
     position: relative;
     right: -45px;
     top: 10px;
     transform: rotate(45deg);
-    
-    /* Ombre et effets */
     box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 0.5);
-    
-    
-    /* Animation */
     animation: ribbon-appear 0.3s ease-out;
 }
 
-/* Coins du ruban */
-.ribbon:before, 
-.ribbon:after {
+.planning-danse-plugin-wrapper .ribbon:before, 
+.planning-danse-plugin-wrapper .ribbon:after {
     content: '';
     position: absolute;
     bottom: -5px;
@@ -283,38 +245,22 @@ table-layout: fixed;
     border-bottom: 5px solid transparent;
 }
 
-.ribbon:before {
+.planning-danse-plugin-wrapper .ribbon:before {
     left: 0;
     border-left: 5px solid transparent;
 }
 
-.ribbon:after {
+.planning-danse-plugin-wrapper .ribbon:after {
     right: 0;
     border-right: 5px solid transparent;
 }
 
-/* Animation d'apparition */
-@keyframes ribbon-appear {
-    from {
-        opacity: 0;
-        transform: rotate(45deg) translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: rotate(45deg) translateY(0);
-    }
-}
-
-
-/* Ajustement du hover effect de la case cours */
-
-
-/* Style de l'icÃƒÆ’Ã‚Â´ne No Spectacle */
-.course {
+/* Style de l'icône No Spectacle */
+.planning-danse-plugin-wrapper .course {
     overflow: visible !important;
 }
 
-.no-spectacle-icon {
+.planning-danse-plugin-wrapper .no-spectacle-icon {
     position: absolute;
     bottom: 5px;
     left: 0px;
@@ -326,29 +272,24 @@ table-layout: fixed;
     z-index: 15;
 }
 
-.no-spectacle-icon svg {
+.planning-danse-plugin-wrapper .no-spectacle-icon svg {
     width: 100%;
     height: 100%;
     color: #ffffff;
 }
 
-.no-spectacle-icon:hover {
+.planning-danse-plugin-wrapper .no-spectacle-icon:hover {
     opacity: 1;
     transform: scale(1.1);
 }
 
-/* Tooltip personnalisÃƒÆ’Ã‚Â© */
-.no-spectacle-icon {
-    position: absolute;
-}
-
 /* Tooltip */
-.no-spectacle-icon:before {
+.planning-danse-plugin-wrapper .no-spectacle-icon:before {
     content: attr(data-tooltip);
     position: absolute;
-    top: calc(100% + 10px); /* ChangÃƒÆ’Ã‚Â© de bottom ÃƒÆ’Ã‚Â  top pour placer en dessous */
-    left: 50%; /* Centre le tooltip */
-    transform: translateX(-50%) translateY(5px); /* Centre horizontalement et ajoute un dÃƒÆ’Ã‚Â©calage initial pour l'animation */
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(5px);
     background: rgba(0, 0, 0, 0.9);
     color: white;
     padding: 8px 12px;
@@ -361,58 +302,54 @@ table-layout: fixed;
     z-index: 100;
 }
 
-/* FlÃƒÆ’Ã‚Â¨che du tooltip */
-.no-spectacle-icon:after {
+.planning-danse-plugin-wrapper .no-spectacle-icon:after {
     content: '';
     position: absolute;
-    top: 100%; /* Place la flÃƒÆ’Ã‚Â¨che en dessous de l'icÃƒÆ’Ã‚Â´ne */
-    left: 50%; /* Centre la flÃƒÆ’Ã‚Â¨che */
-    transform: translateX(-50%) translateY(5px); /* Centre horizontalement */
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(5px);
     border: 6px solid transparent;
-    border-bottom-color: rgba(0, 0, 0, 0.9); /* Change la direction de la flÃƒÆ’Ã‚Â¨che */
-    border-top-color: transparent; /* Retire la couleur du haut */
+    border-bottom-color: rgba(0, 0, 0, 0.9);
+    border-top-color: transparent;
     visibility: hidden;
     opacity: 0;
     transition: all 0.3s ease;
     z-index: 20;
 }
 
-/* Animation au survol */
-.no-spectacle-icon:hover:before,
-.no-spectacle-icon:hover:after {
+.planning-danse-plugin-wrapper .no-spectacle-icon:hover:before,
+.planning-danse-plugin-wrapper .no-spectacle-icon:hover:after {
     visibility: visible;
     opacity: 1;
-    transform: translateX(-50%) translateY(0); /* Animation vers le haut */
+    transform: translateX(-50%) translateY(0);
 }
 
-
 /* Style de la photo du professeur */
-.teacher-photo-wrapper {
+.planning-danse-plugin-wrapper .teacher-photo-wrapper {
     position: absolute;
     bottom: -3px;
     right: 5px;
     z-index: 20;
 }
-.teacher-photo-wrapper:hover {
+.planning-danse-plugin-wrapper .teacher-photo-wrapper:hover {
     z-index: 120;
 }
 
-.teacher-photo {
+.planning-danse-plugin-wrapper .teacher-photo {
     width: 25px;
     height: 25px;
     border-radius: 50%;
     object-fit: cover;    
     transition: all 0.3s ease;
-    
 }
 
-.teacher-link {
+.planning-danse-plugin-wrapper .teacher-link {
     display: block;
     position: relative;
     text-decoration: none;
 }
 
-.teacher-tooltip {
+.planning-danse-plugin-wrapper .teacher-tooltip {
     position: absolute;
     bottom: calc(100% + 10px);
     right: -20px;
@@ -429,7 +366,7 @@ table-layout: fixed;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.teacher-tooltip-content {
+.planning-danse-plugin-wrapper .teacher-tooltip-content {
     display: flex;
     position: relative;
     align-items: center;
@@ -437,29 +374,25 @@ table-layout: fixed;
     z-index: 151;
 }
 
-/* Photo agrandie dans le tooltip */
-.teacher-tooltip-photo {
+.planning-danse-plugin-wrapper .teacher-tooltip-photo {
     width: 80px;
     height: 80px;
     border-radius: 50%;
     object-fit: cover;
-    
 }
 
-/* Informations du professeur */
-.teacher-tooltip-info {
+.planning-danse-plugin-wrapper .teacher-tooltip-info {
     flex: 1;
     color: white;
 }
 
-.teacher-tooltip-name {
+.planning-danse-plugin-wrapper .teacher-tooltip-name {
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 5px;
 }
 
-/* Style du lien de profil */
-.teacher-profile-link {
+.planning-danse-plugin-wrapper .teacher-profile-link {
     color: #ffffff;
     text-decoration: underline;
     font-size: 12px;
@@ -467,9 +400,7 @@ table-layout: fixed;
     margin-top: 5px;
 }
 
-
-/* Tooltip pour le nom du professeur */
-.teacher-tooltip-link {
+.planning-danse-plugin-wrapper .teacher-tooltip-link {
     font-size: 12px;
     color: #ffffff;
     text-decoration: underline;
@@ -477,8 +408,7 @@ table-layout: fixed;
     transition: opacity 0.2s ease;
 }
 
-/* FlÃƒÂ¨che du tooltip */
-.teacher-tooltip:after {
+.planning-danse-plugin-wrapper .teacher-tooltip:after {
     content: '';
     position: absolute;
     bottom: -8px;
@@ -490,29 +420,27 @@ table-layout: fixed;
     border-top: 8px solid rgba(0, 0, 0, 0.9);
 }
 
-/* Animation au survol */
-.teacher-link:hover .teacher-photo {
+.planning-danse-plugin-wrapper .teacher-link:hover .teacher-photo {
     transform: scale(1.1);
     border-color: white;
 }
 
-.teacher-link:hover .teacher-tooltip {
+.planning-danse-plugin-wrapper .teacher-link:hover .teacher-tooltip {
     visibility: visible;
     opacity: 1;
     transform: translateY(0) translateZ(0);
     -webkit-transform: translateY(0) translateZ(0);
 }
 
-.teacher-link:hover .teacher-tooltip-link {
+.planning-danse-plugin-wrapper .teacher-link:hover .teacher-tooltip-link {
     opacity: 1;
 }
 
-.course[data-category-tooltip] {
+.planning-danse-plugin-wrapper .course[data-category-tooltip] {
     position: relative;
-    
 }
 
-.course[data-category-tooltip]:before {
+.planning-danse-plugin-wrapper .course[data-category-tooltip]:before {
     content: attr(data-category-tooltip);
     position: absolute;
     width:100px;
@@ -531,41 +459,39 @@ table-layout: fixed;
     transition: all 0.3s ease;
     z-index: 1000;
     pointer-events: none;
-   box-shadow: 0px 5px 15px #00000036;
+    box-shadow: 0px 5px 15px #00000036;
 }
 
-.course[data-category-tooltip]:hover:before {
+.planning-danse-plugin-wrapper .course[data-category-tooltip]:hover:before {
     visibility: visible;
     opacity: 1;
     transform: translateX(-50%) translateY(3px);
 }
 
-
 /* Styles pour le filtrage */
-.planning-table td.course {
+.planning-danse-plugin-wrapper .planning-table td.course {
     transition: opacity 0.3s ease;
 }
 
-.planning-table td.empty-cell {
+.planning-danse-plugin-wrapper .planning-table td.empty-cell {
     visibility: visible !important;
 }
 
-/* Style du menu de filtre */
-.planning-filters {
+.planning-danse-plugin-wrapper .planning-filters {
     display: flex;
     flex-direction: column;
     gap: 8px;
     padding: 8px;
 }
 
-.filter-group {
+.planning-danse-plugin-wrapper .filter-group {
     display: flex;
     justify-content: center;
     gap: 8px;
     flex-wrap: wrap;
 }
 
-.category-filter {
+.planning-danse-plugin-wrapper .category-filter {
     padding: 8px 12px;
     border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -580,47 +506,46 @@ table-layout: fixed;
     min-width: 200px;
 }
 
-.category-filter:hover {
+.planning-danse-plugin-wrapper .category-filter:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.category-filter:focus {
+.planning-danse-plugin-wrapper .category-filter:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
-     color: #fff;
+    color: #fff;
 }
 
-/* Style de la flÃƒÂ¨che du select */
-.category-filter {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+.planning-danse-plugin-wrapper .category-filter {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 8px center;
     background-size: 16px;
     padding-right: 32px;
 }
 
-.days-filter {
+.planning-danse-plugin-wrapper .days-filter {
     display: flex;
     justify-content: center;
     gap: 4px;
     margin-bottom: 4px;
-    flex-wrap: nowrap; /* Empêcher le retour à la ligne */
-    overflow-x: auto; /* Permettre le défilement horizontal si nécessaire */
-    scrollbar-width: none; /* Cacher la scrollbar sur Firefox */
-    -ms-overflow-style: none; /* Cacher la scrollbar sur IE/Edge */
-    padding-bottom: 4px; /* Espace pour la scrollbar */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 4px;
 }
-.days-filter::-webkit-scrollbar {
+.planning-danse-plugin-wrapper .days-filter::-webkit-scrollbar {
     display: none;
 }
 
-.day-toggle {
+.planning-danse-plugin-wrapper .day-toggle {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: rgba(255, 255, 255, 0.5);
     padding: 4px 8px;
     min-width: auto;
-    flex-shrink: 0; /* Empêcher la compression des boutons */
+    flex-shrink: 0;
     min-width:90px;
     font-size: 0.85em;
     white-space: nowrap;
@@ -633,67 +558,41 @@ table-layout: fixed;
     gap: 6px;
 }
 
-.day-toggle.active {
+.planning-danse-plugin-wrapper .day-toggle.active {
    background: rgba(255, 255, 255, 0.9);
     color: #000000;
     border-color: #ffffff;
 }
 
-.day-toggle:hover {
+.planning-danse-plugin-wrapper .day-toggle:hover {
     background: rgba(255, 255, 255, 0.2);
 }
 
-.day-toggle.active:hover {
+.planning-danse-plugin-wrapper .day-toggle.active:hover {
     background: rgba(255, 255, 255, 1);
 }
 
-.day-toggle input {
+.planning-danse-plugin-wrapper .day-toggle input {
     display: none;
 }
 
-.day-toggle svg {
+.planning-danse-plugin-wrapper .day-toggle svg {
     width: 14px;
     height: 14px;
 }
 
-.day-toggle.active svg {
+.planning-danse-plugin-wrapper .day-toggle.active svg {
     transform: scale(1.1);
 }
 
-.planning-table.filtered .hidden-cell {
+.planning-danse-plugin-wrapper .planning-table.filtered .hidden-cell,
+.planning-danse-plugin-wrapper .planning-table.filtered .hidden-course,
+.planning-danse-plugin-wrapper .planning-table.filtered .hidden-row {
     display: none;
 }
 
-.planning-table.filtered .hidden-course {
-    display: none;
-}
-
-.planning-table.filtered .hidden-row {
-    display: none;
-}
-
-/* Animation pour les transitions */
-.planning-table td {
-    transition: opacity 0.3s ease;
-}
-
-.planning-table.filtered td.course:not(.hidden-course) {
-    opacity: 1;
-}
-
-/* Ajustement de l'espacement en mode filtrÃƒÂ© */
-.planning-table.filtered tr:not(.hidden-row) {
-    display: table-row;
-}
-
-/* AmÃƒÂ©lioration du contraste pour les cellules visibles */
-.planning-table.filtered td.course:not(.hidden-course) {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-
-/* Bouton de rÃƒÂ©servation */
-.book-trial {
+/* Bouton de réservation */
+.planning-danse-plugin-wrapper .book-trial {
     position: absolute;
     bottom: 3px;
     left: 50%;
@@ -710,19 +609,19 @@ table-layout: fixed;
     z-index: 10;
 }
 
-.course:hover .book-trial {
+.planning-danse-plugin-wrapper .course:hover .book-trial {
     opacity: 1;
 }
 
-.book-trial.selected {
+.planning-danse-plugin-wrapper .book-trial.selected {
     background: #4CAF50;
     color: white;
     opacity: 1;
 }
 
 /* Panier */
-.booking-cart {
-     position: fixed;
+.planning-danse-plugin-wrapper .booking-cart {
+    position: fixed;
     top:0px;
     right: -350px;
     padding-top:80px;
@@ -734,14 +633,11 @@ table-layout: fixed;
     z-index: 90000;
     color: #333;
     font-size: 14px;
-     border-radius: 0px!important;
-    
+    border-radius: 0px!important;
 }
 
-
-
-.booking-cart-toggle {
-   position: fixed;
+.planning-danse-plugin-wrapper .booking-cart-toggle {
+    position: fixed;
     right: 20px;
     width: 50px;
     height: 50px;
@@ -756,13 +652,13 @@ table-layout: fixed;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.booking-cart-toggle svg {
+.planning-danse-plugin-wrapper .booking-cart-toggle svg {
     width: 24px;
     height: 24px;
     color: #373737;
 }
 
-.booking-cart-toggle .cart-count {
+.planning-danse-plugin-wrapper .booking-cart-toggle .cart-count {
     position: absolute;
     top: -5px;
     right: -5px;
@@ -778,19 +674,19 @@ table-layout: fixed;
     font-weight: bold;
 }
 
-.booking-cart-toggle:hover {
+.planning-danse-plugin-wrapper .booking-cart-toggle:hover {
     transform: scale(1.1);
 }
 
-.booking-cart.open + .booking-cart-toggle {
+.planning-danse-plugin-wrapper .booking-cart.open + .booking-cart-toggle {
     display: none;
 }
 
-.booking-cart.open {
+.planning-danse-plugin-wrapper .booking-cart.open {
     right: 0;
 }
 
-.cart-header {
+.planning-danse-plugin-wrapper .cart-header {
     padding: 15px;
     display: flex;
     justify-content: space-between;
@@ -801,7 +697,7 @@ table-layout: fixed;
     border-radius: 10px 10px 0 0 !important;
 }
 
-.close-cart {
+.planning-danse-plugin-wrapper .close-cart {
     background: none;
     border: none;
     font-size: 24px;
@@ -809,15 +705,14 @@ table-layout: fixed;
     padding: 0 5px;
 }
 
-.cart-items {
+.planning-danse-plugin-wrapper .cart-items {
     padding: 20px;
     overflow-y: auto;
     max-height: calc(100vh - 200px);
 }
 
-.cart-item {
+.planning-danse-plugin-wrapper .cart-item {
     position: relative;
-   
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 15px;
@@ -826,7 +721,7 @@ table-layout: fixed;
     position: relative;
 }
 
-.cart-item::before {
+.planning-danse-plugin-wrapper .cart-item::before {
     content: '';
     position: absolute;
     top: 0;
@@ -837,8 +732,7 @@ table-layout: fixed;
     z-index: -1;
 }
 
-
-.cart-item h4 {
+.planning-danse-plugin-wrapper .cart-item h4 {
     margin: 0 0 10px 0;
     font-size: 15px;
     color: #333;
@@ -846,28 +740,26 @@ table-layout: fixed;
     padding-bottom:0px;
 }
 
-.cart-header h3 {
+.planning-danse-plugin-wrapper .cart-header h3 {
     margin: 0;
     font-size: 18px;
     color: #333;
 }
 
-.cart-item p {
+.planning-danse-plugin-wrapper .cart-item p {
     margin: 1px 0;
     color: #666;
     font-size: 14px;
     padding-bottom:0px;
 }
 
-.cart-item .no-spectacle-text {
+.planning-danse-plugin-wrapper .cart-item .no-spectacle-text {
     font-size: 12px;
     color: #ff1e1e;
     font-style: italic;
 }
 
-
-
-.remove-item {
+.planning-danse-plugin-wrapper .remove-item {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -882,11 +774,11 @@ table-layout: fixed;
     transition: opacity 0.2s;
 }
 
-.remove-item:hover {
+.planning-danse-plugin-wrapper .remove-item:hover {
     opacity: 1;
 }
 
-.cart-footer {
+.planning-danse-plugin-wrapper .cart-footer {
     padding: 20px;
     border-top: 1px solid #eee;
     position: absolute;
@@ -896,14 +788,14 @@ table-layout: fixed;
     border-radius: 0px 0px 10px 10px !important;
 }
 
-.cart-count {
+.planning-danse-plugin-wrapper .cart-count {
     display: block;
     margin-bottom: 10px;
     font-size: 14px;
     color: #666;
 }
 
-.validate-booking {
+.planning-danse-plugin-wrapper .validate-booking {
     background: #de2048;
     color: white;
     border: none;
@@ -916,19 +808,18 @@ table-layout: fixed;
     transition: background-color 0.2s;
 }
 
-.validate-booking:hover {
+.planning-danse-plugin-wrapper .validate-booking:hover {
     background: #45a049;
 }
 
-.validate-booking:disabled {
+.planning-danse-plugin-wrapper .validate-booking:disabled {
     background: #cccccc;
     cursor: not-allowed;
 }
 
 /* Modal */
-
-.modal {
-    display: none;  /* Hidden by default */
+.planning-danse-plugin-wrapper .modal {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -939,15 +830,14 @@ table-layout: fixed;
     opacity: 0;
     transition: opacity 0.3s ease;
     padding-top:80px;
-    
 }
 
-.modal.show {
+.planning-danse-plugin-wrapper .modal.show {
     display: block;
     opacity: 1;
 }
 
-.modal-content {
+.planning-danse-plugin-wrapper .modal-content {
     margin: auto;
     background: #fff;
     padding: 25px;
@@ -958,19 +848,17 @@ table-layout: fixed;
     transition: transform 0.3s ease;
 }
 
-.modal.show .modal-content {
+.planning-danse-plugin-wrapper .modal.show .modal-content {
     transform: translateY(0);
 }
 
-.modal-content h3 {
+.planning-danse-plugin-wrapper .modal-content h3 {
     margin: 0 0 20px 0;
     color: #333;
     font-size: 20px;
 }
 
-
-
-.selected-course {
+.planning-danse-plugin-wrapper .selected-course {
     position: relative;
     line-height:0.2;
     padding: 10px;
@@ -979,17 +867,15 @@ table-layout: fixed;
     margin-bottom: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     position: relative;
-   
 }
 
-.selected-course .no-spectacle-text {
+.planning-danse-plugin-wrapper .selected-course .no-spectacle-text {
     font-size: 12px;
     color: #ff1e1e;
     font-style: italic;
 }
 
-
-.selected-course::before {
+.planning-danse-plugin-wrapper .selected-course::before {
     content: '';
     position: absolute;
     border-radius: 6px;
@@ -1001,38 +887,35 @@ table-layout: fixed;
     z-index: -1;
 }
 
-.selected-course:last-child {
+.planning-danse-plugin-wrapper .selected-course:last-child {
     margin-bottom: 20px;
-    
 }
 
-.selected-course h4 {
+.planning-danse-plugin-wrapper .selected-course h4 {
     margin: 0 0 8px 0;
     color: #333;
     font-size:14px;
 }
 
-.selected-course p {
+.planning-danse-plugin-wrapper .selected-course p {
     margin: 5px 0;
     color: #666;
     font-size:12px;
 }
 
-
-.form-field {
+.planning-danse-plugin-wrapper .form-field {
     margin-bottom: 5px;
-    
 }
 
-.form-field label {
+.planning-danse-plugin-wrapper .form-field label {
     display: block;
     margin-bottom: 2px;
     color: #333;
     font-weight: 500;
 }
 
-.form-field input,
-.form-field textarea {
+.planning-danse-plugin-wrapper .form-field input,
+.planning-danse-plugin-wrapper .form-field textarea {
     width: 100%;
     height:30px;
     padding: 5px;
@@ -1041,15 +924,14 @@ table-layout: fixed;
     font-size: 16px;
 }
 
-.form-field input:focus,
-.form-field textarea:focus {
+.planning-danse-plugin-wrapper .form-field input:focus,
+.planning-danse-plugin-wrapper .form-field textarea:focus {
     outline: none;
     border-color: #4CAF50;
     box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
 }
 
-/* Bouton d'envoi du formulaire */
-.modal-content button[type="submit"] {
+.planning-danse-plugin-wrapper .modal-content button[type="submit"] {
     background: #de2048;
     color: white;
     border: none;
@@ -1060,114 +942,120 @@ table-layout: fixed;
     transition: background-color 0.2s;
 }
 
-.modal-content button[type="submit"]:hover {
+.planning-danse-plugin-wrapper .modal-content button[type="submit"]:hover {
     background: #de2048;
 }
 
+/* Animation de chargement */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-
-
-@media screen and (max-width: 1200px) {
-    .filter-group {
-        justify-content: center;
-        gap: 8px;
+@keyframes ribbon-appear {
+    from {
+        opacity: 0;
+        transform: rotate(45deg) translateY(-20px);
     }
-    
-    .category-filter {
-        min-width: 180px;
-    }
-     .planning-body{
-         margin-top: 10px; 
-    }
-  .planning-table .time-cell, th.studio-row-first, th.time-header{
-        width: var(--time-collumn-width) !important;
-       
+    to {
+        opacity: 1;
+        transform: rotate(45deg) translateY(0);
     }
 }
 
 /* Responsive Design */
-@media screen and (max-width: 1024px) {
-    
+@media screen and (max-width: 1200px) {
+    .planning-danse-plugin-wrapper .filter-group {
+        justify-content: center;
+        gap: 8px;
+    }
+    .planning-danse-plugin-wrapper .category-filter {
+        min-width: 180px;
+    }
+    .planning-danse-plugin-wrapper .planning-body{
+         margin-top: 10px; 
+    }
+    .planning-danse-plugin-wrapper .planning-table .time-cell, 
+    .planning-danse-plugin-wrapper th.studio-row-first, 
+    .planning-danse-plugin-wrapper th.time-header{
+        width: var(--time-collumn-width) !important;
+    }
+}
 
-    .planning-table {
+@media screen and (max-width: 1024px) {
+    .planning-danse-plugin-wrapper .planning-table {
         font-size: 14px;
     }
-     .teacher-photo {
+    .planning-danse-plugin-wrapper .teacher-photo {
         width: 20px;
         height: 20px;
     }
 
-    .planning-body{
+    .planning-danse-plugin-wrapper .planning-body{
          margin-top: 10px; 
     }
-   .planning-table .time-cell, th.studio-row-first, th.time-header{
+   .planning-danse-plugin-wrapper .planning-table .time-cell, 
+   .planning-danse-plugin-wrapper th.studio-row-first, 
+   .planning-danse-plugin-wrapper th.time-header{
         width: var(--time-collumn-width) !important;
-       
     }
-   
 }
 
-
 @media screen and (max-width: 768px) {
-   
-    .planning-container {
-       
+    .planning-danse-plugin-wrapper .planning-container {
         padding-top: 180px !important;
     }
 
-    .planning-body{
+    .planning-danse-plugin-wrapper .planning-body{
          margin-top: 0px; 
     }
     
-    .planning-body::-webkit-scrollbar,
-    .planning-headers::-webkit-scrollbar {
-        height: 6px; /* Scrollbar plus fine sur mobile */
+    .planning-danse-plugin-wrapper .planning-body::-webkit-scrollbar,
+    .planning-danse-plugin-wrapper .planning-headers::-webkit-scrollbar {
+        height: 6px;
     }
-    .planning-header {
+    .planning-danse-plugin-wrapper .planning-header {
         padding: 5px 5px 0 5px;
     }
     
-
-    .planning-table {
+    .planning-danse-plugin-wrapper .planning-table {
         font-size: 12px;
     }
 
-    .planning-table .header-table,.planning-table {
-        min-width: var(--planning-min-width-768); /* Même largeur que planning-table */
-        
-        
+    .planning-danse-plugin-wrapper .planning-table .header-table,
+    .planning-danse-plugin-wrapper .planning-table {
+        min-width: var(--planning-min-width-768);
     }
-    .planning-table .time-cell, th.studio-row-first, th.time-header{
+    .planning-danse-plugin-wrapper .planning-table .time-cell, 
+    .planning-danse-plugin-wrapper th.studio-row-first, 
+    .planning-danse-plugin-wrapper th.time-header{
         width: var(--time-collumn-width) !important;
-       
     }
     
-   
-    .time-cell,
-    .time-header {
-       
+    .planning-danse-plugin-wrapper .time-cell,
+    .planning-danse-plugin-wrapper .time-header {
         left: 0;
         z-index: 2;
         background: inherit;
     }
     
-    .planning-table th:not(.time-header),
-    .planning-table td:not(.time-cell):not(.empty-cell) {
+    .planning-danse-plugin-wrapper .planning-table th:not(.time-header),
+    .planning-danse-plugin-wrapper .planning-table td:not(.time-cell):not(.empty-cell) {
         width: 140px;
         min-width: 140px;
     }
     
-    .planning-filters {
+    .planning-danse-plugin-wrapper .planning-filters {
         padding: 5px;
     }
 
-     .filter-group {
+    .planning-danse-plugin-wrapper .filter-group {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 5px;
     }
 
-    .category-filter {
+    .planning-danse-plugin-wrapper .category-filter {
         padding: 6px 8px;
         font-size: 0.8em;
         min-width: unset;
@@ -1180,20 +1068,19 @@ table-layout: fixed;
         padding-right: 20px;
     }
 
-    .course {
+    .planning-danse-plugin-wrapper .course {
         height: 100%;
         padding: 4px 3px !important;
-        font-size: 11px; /* Réduire légèrement la taille du texte */
-        white-space: normal !important; /* Permettre le retour à la ligne */
+        font-size: 11px;
+        white-space: normal !important;
     }
     
-    .teacher-photo {
+    .planning-danse-plugin-wrapper .teacher-photo {
         width: 18px;
         height: 18px;
     }
 
-    /* Indicateur de dÃƒÆ’Ã‚Â©filement modernisÃƒÆ’Ã‚Â© */
-    .planning-container::after {
+    .planning-danse-plugin-wrapper .planning-container::after {
         content: '← Faites défiler →';
         display: block;
         text-align: center;
@@ -1209,30 +1096,30 @@ table-layout: fixed;
         animation: fadeIn 0.5s ease-out;
         z-index: 3;
     }
-    .teacher-tooltip {
-        z-index: 200; /* Encore plus ÃƒÂ©levÃƒÂ© sur mobile pour ÃƒÂ©viter les problÃƒÂ¨mes */
+    .planning-danse-plugin-wrapper .teacher-tooltip {
+        z-index: 200;
     }
-      .booking-cart {
+    .planning-danse-plugin-wrapper .booking-cart {
         width: 100%;
         right: -100%;
     }
     
-    .modal-content {
+    .planning-danse-plugin-wrapper .modal-content {
         width: 95%;
         margin: 20px auto;
         padding: 20px;
     }
     
-    .course.touch-active {
+    .planning-danse-plugin-wrapper .course.touch-active {
         z-index: 105 !important;
     }
 
-     .ribbon-wrapper {
+    .planning-danse-plugin-wrapper .ribbon-wrapper {
         width: 75px;
         height: 75px;
     }
     
-    .ribbon {
+    .planning-danse-plugin-wrapper .ribbon {
         font-size: 0.6em;
         line-height: 15px;
         width: 100px;
@@ -1240,159 +1127,138 @@ table-layout: fixed;
         top: 12px;
     }
 
-     .no-spectacle-icon:before {
+    .planning-danse-plugin-wrapper .no-spectacle-icon:before {
         font-size: 10px;
         padding: 6px 10px;
-        white-space: normal; /* Permet le retour ÃƒÆ’Ã‚Â  la ligne sur mobile si nÃƒÆ’Ã‚Â©cessaire */
-        max-width: 200px; /* Limite la largeur sur mobile */
+        white-space: normal;
+        max-width: 200px;
         text-align: center;
     }
     
-    .days-filter {
-        margin: 0 -5px; /* Étendre légèrement hors des bords */
+    .planning-danse-plugin-wrapper .days-filter {
+        margin: 0 -5px;
         padding: 0 5px;
     }
     
-    .day-toggle {
+    .planning-danse-plugin-wrapper .day-toggle {
         padding: 3px 6px;
         font-size: 0.8em;
     }
     
-    .day-toggle svg {
+    .planning-danse-plugin-wrapper .day-toggle svg {
         width: 12px;
         height: 12px;
     }
 }
 
 @media screen and (max-width: 480px) {
-    .days-filter {
+    .planning-danse-plugin-wrapper .days-filter {
         scrollbar-width: none;
         -ms-overflow-style: none;
         flex-wrap: wrap; 
     }
-
    
-    .planning-table .time-cell, th.studio-row-first, th.time-header{
+    .planning-danse-plugin-wrapper .planning-table .time-cell, 
+    .planning-danse-plugin-wrapper th.studio-row-first, 
+    .planning-danse-plugin-wrapper th.time-header{
         width: var(--time-collumn-width) !important;
-       
     }
 }
 
-/* Pour les très petits écrans */
 @media screen and (max-width: 380px) {
-    .filter-group {
-        grid-template-columns: 1fr; /* Passer à une colonne */
+    .planning-danse-plugin-wrapper .filter-group {
+        grid-template-columns: 1fr;
     }
     
-    .planning-container {
-       
-        padding-top: 230px !important; /* Ajuster selon vos besoins sur mobile */
-
+    .planning-danse-plugin-wrapper .planning-container {
+        padding-top: 230px !important;
     }
 
-    .category-filter {
+    .planning-danse-plugin-wrapper .category-filter {
         font-size: 0.75em;
         padding: 5px 6px;
     }
-
    
-    .planning-table .time-cell, th.studio-row-first, th.time-header{
+    .planning-danse-plugin-wrapper .planning-table .time-cell, 
+    .planning-danse-plugin-wrapper th.studio-row-first, 
+    .planning-danse-plugin-wrapper th.time-header{
         width: var(--time-collumn-width) !important;
     }
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-
-
-/* Optimisations pour le dÃƒÆ’Ã‚Â©filement tactile */
 @media (hover: none) {
-    .planning-container {
+    .planning-danse-plugin-wrapper .planning-container {
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
     }
 }
 
-/* AmÃƒÆ’Ã‚Â©lioration de la lisibilitÃƒÆ’Ã‚Â© sur ÃƒÆ’Ã‚Â©crans haute densitÃƒÆ’Ã‚Â© */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .course-line {
+    .planning-danse-plugin-wrapper .course-line {
         font-weight: 400;
     }
 }
 
-
-/* Styles pour desktop */
 @media (hover: hover) {
-    /* Tooltips de catégorie */
-    .course[data-category-tooltip]:hover:before {
+    .planning-danse-plugin-wrapper .course[data-category-tooltip]:hover:before {
         visibility: visible;
         opacity: 1;
         transform: translateX(-50%) translateY(-10px);
     }
 
-    /* Hover des cours */
-    .course:hover {
+    .planning-danse-plugin-wrapper .course:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    .course:hover .book-trial {
+    .planning-danse-plugin-wrapper .course:hover .book-trial {
         opacity: 1;
     }
 
-    /* Hover des professeurs */
-    .teacher-link.has-profile {
+    .planning-danse-plugin-wrapper .teacher-link.has-profile {
         cursor: pointer;
     }
     
-    .teacher-link.has-profile:hover .teacher-tooltip {
+    .planning-danse-plugin-wrapper .teacher-link.has-profile:hover .teacher-tooltip {
         visibility: visible;
         opacity: 1;
         transform: translateY(0) translateZ(0);
     }
 }
 
-/* Styles pour mobile */
 @media (hover: none) {
-    /* États actifs sur mobile */
-    .course.touch-active {
+    .planning-danse-plugin-wrapper .course.touch-active {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         z-index: 100 !important;
     }
 
-    .course.touch-active .book-trial {
-        opacity: 1 !important; /* Force l'opacité */
-        visibility: visible !important; /* Force la visibilité */
-        transition: none; /* Désactive la transition pour un affichage immédiat */
-        bottom: 3px; /* Position fixe en bas */
-        pointer-events: auto; /* S'assure que le bouton est cliquable */
+    .planning-danse-plugin-wrapper .course.touch-active .book-trial {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transition: none;
+        bottom: 3px;
+        pointer-events: auto;
     }
 
-    /* Position du bouton pour tous les cours sur mobile */
-    .book-trial {
+    .planning-danse-plugin-wrapper .book-trial {
         bottom: 3px;
         opacity: 0;
         visibility: hidden;
     }
 
-    /* Désactive les effets de hover sur mobile */
-    .course:hover {
+    .planning-danse-plugin-wrapper .course:hover {
         transform: none;
         box-shadow: none;
     }
 
-    .course:hover .book-trial {
+    .planning-danse-plugin-wrapper .course:hover .book-trial {
         opacity: 0;
         visibility: hidden;
     }
 }
 
-/* Styles pour le lien de profil */
-.teacher-profile-link {
+.planning-danse-plugin-wrapper .teacher-profile-link {
     color: #ffffff;
     text-decoration: underline;
     font-size: 12px;
@@ -1400,28 +1266,22 @@ table-layout: fixed;
     margin-top: 5px;
 }
 
-/* Styles pour le tooltip professeur en mode touch */
-.teacher-link.touch-active .teacher-tooltip {
+.planning-danse-plugin-wrapper .teacher-link.touch-active .teacher-tooltip {
     visibility: visible !important;
     opacity: 1 !important;
     transform: translateY(0) translateZ(0) !important;
 }
 
-/* Z-index pour le tooltip du professeur */
-.teacher-link.touch-active {
+.planning-danse-plugin-wrapper .teacher-link.touch-active {
     z-index: 150 !important;
 }
 
-/* Ajustement pour les colonnes masquées */
-.planning-table td[data-day].hidden-day,
-.planning-table th[data-day].hidden-day {
+.planning-danse-plugin-wrapper .planning-table td[data-day].hidden-day,
+.planning-danse-plugin-wrapper .planning-table th[data-day].hidden-day {
     display: none;
 }
 
-/* Animation de transition */
-.planning-table td[data-day],
-.planning-table th[data-day] {
+.planning-danse-plugin-wrapper .planning-table td[data-day],
+.planning-danse-plugin-wrapper .planning-table th[data-day] {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
-
-
