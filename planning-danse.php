@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Planning Danse En Mouvance
  * Description: Affiche le planning hebdomadaire des cours de danse depuis Google Sheets
- * Version: 1.6
+ * Version: 1.7
  * Author: Benga
  */
 
@@ -219,6 +219,16 @@ class PlanningDansePlugin {
     
     // Nouvelle méthode pour ajouter les éléments de réservation
     public function add_booking_elements() {
+        // Vérifier la période de réservation
+        $start = get_option('booking_period_start');
+        $end = get_option('booking_period_end');
+        $today = date('Y-m-d');
+        $isBookingPeriod = ($today >= $start && $today <= $end);
+
+        // Si on n'est pas dans la période de réservation, on n'affiche pas le panier.
+        if (!$isBookingPeriod) {
+            return;
+        }
         ?>
         <div class="booking-cart">
             <div class="cart-header">
