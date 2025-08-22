@@ -2,36 +2,19 @@
 /**
  * Plugin Name: Planning Danse En Mouvance
  * Description: Affiche le planning hebdomadaire des cours de danse depuis Google Sheets
- * Version: 1.3
+ * Version: 1.5
  * Author: Benga
  */
 
 // Empêcher l'accès direct au fichier
 if (!defined('ABSPATH')) exit;
 
-
-
-
 // Classe principale du plugin
 class PlanningDansePlugin {
     private $google_sheet_id;
     private $google_api_key;
-     private $timeSlots = [
-        '10:00', '10:15', '10:30', '10:45', 
-        '11:00', '11:15', '11:30', '11:45',
-        '12:00', '12:15', '12:30', '12:45',
-        '13:00', '13:15', '13:30', '13:45',
-        '14:00', '14:15', '14:30', '14:45',
-        '15:00', '15:15', '15:30', '15:45',
-        '16:00', '16:15', '16:30', '16:45',
-        '17:00', '17:15', '17:30', '17:45',
-        '18:00', '18:15', '18:30', '18:45',
-        '19:00', '19:15', '19:30', '19:45',
-        '20:00', '20:15', '20:30', '20:45',
-        '21:00', '21:15', '21:30', '21:45',
-        '22:00', '22:15'
-    ];
-    
+    private $timeSlots = []; // Sera rempli dynamiquement
+
     // Au début de votre classe, ajoutez une méthode utilitaire :
     private function get_redirect_uri() {
         $redirect_uri = admin_url('admin-ajax.php') . '?action=google_auth_callback';
@@ -45,15 +28,13 @@ class PlanningDansePlugin {
         add_action('admin_init', array($this, 'register_settings'));
         add_shortcode('planning_danse', array($this, 'display_planning'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_styles'));
-       
-        
         
         add_action('wp_ajax_submit_trial_booking', array($this, 'handle_trial_booking'));
         add_action('wp_ajax_nopriv_submit_trial_booking', array($this, 'handle_trial_booking'));
         add_action('wp_ajax_test_notification_email', array($this, 'test_notification_email'));
 
-        
-       
+        // Génère les créneaux horaires à partir des réglages
+        $this->timeSlots = $this->generate_time_slots();
         
         // Initialisation du texte par défaut
         if (!get_option('planning_no_spectacle_text')) {
@@ -142,6 +123,37 @@ class PlanningDansePlugin {
         add_action('wp_ajax_nopriv_google_auth_callback', array($this, 'handle_google_auth'));
         add_action('wp_ajax_google_auth_callback', array($this, 'handle_google_auth'));
 
+    }
+
+    /**
+     * Génère dynamiquement les créneaux horaires en fonction des options de l'admin.
+     * @return array La liste des créneaux horaires (ex: ['10:00', '10:15', ...])
+     */
+    private function generate_time_slots() {
+        $start_time_str = get_option('planning_start_time', '10:00');
+        $end_time_str = get_option('planning_end_time', '22:15');
+
+        try {
+            $start = new DateTime($start_time_str);
+            $end = new DateTime($end_time_str);
+            // On s'assure que l'heure de fin est bien après l'heure de début
+            if ($start >= $end) {
+                return [];
+            }
+            
+            $interval = new DateInterval('PT15M'); // Intervalle de 15 minutes
+            // On ajoute 1 seconde à la fin pour s'assurer que le dernier créneau est inclus
+            $period = new DatePeriod($start, $interval, $end->modify('+1 second')); 
+
+            $slots = [];
+            foreach ($period as $date) {
+                $slots[] = $date->format('H:i');
+            }
+            return $slots;
+        } catch (Exception $e) {
+            // En cas de format d'heure invalide, retourner un tableau vide
+            return [];
+        }
     }
     
     public function enqueue_scripts() {
@@ -720,6 +732,9 @@ class PlanningDansePlugin {
         // Settings pour Réglages Généraux
         register_setting('planning-danse-general', 'planning_google_sheet_id');
         register_setting('planning-danse-general', 'planning_google_api_key');
+        register_setting('planning-danse-general', 'planning_start_time');
+        register_setting('planning-danse-general', 'planning_end_time');
+        register_setting('planning-danse-general', 'planning_teacher_display_style');
         
         // Settings pour l'interface
         register_setting('planning-danse-interface', 'planning_danse_interface_colors', array(
@@ -898,6 +913,34 @@ class PlanningDansePlugin {
                                    value="<?php echo esc_attr(get_option('planning_google_api_key')); ?>" 
                                    class="regular-text">
                             <p class="description">Clé API à créer dans la <a href="https://console.cloud.google.com/" target="_blank">Console Google Cloud</a></p>
+                        </td>
+                    </tr>
+                     <tr>
+                        <th>Heure de début du planning</th>
+                        <td>
+                            <input type="time" name="planning_start_time" 
+                                   value="<?php echo esc_attr(get_option('planning_start_time', '10:00')); ?>">
+                            <p class="description">L'heure à laquelle le planning commence.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Heure de fin du planning</th>
+                        <td>
+                            <input type="time" name="planning_end_time" 
+                                   value="<?php echo esc_attr(get_option('planning_end_time', '22:15')); ?>">
+                            <p class="description">L'heure à laquelle le planning se termine (le dernier créneau affiché).</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Affichage du professeur</th>
+                        <td>
+                            <select name="planning_teacher_display_style">
+                                <option value="photo" <?php selected(get_option('planning_teacher_display_style', 'photo'), 'photo'); ?>>Photo seule</option>
+                                <option value="firstname" <?php selected(get_option('planning_teacher_display_style'), 'firstname'); ?>>Prénom seul</option>
+                                <option value="fullname" <?php selected(get_option('planning_teacher_display_style'), 'fullname'); ?>>Prénom et Nom</option>
+                                <option value="photo_firstname" <?php selected(get_option('planning_teacher_display_style'), 'photo_firstname'); ?>>Photo et Prénom</option>
+                            </select>
+                            <p class="description">Choisissez comment afficher les informations du professeur sur le planning. Si un professeur n'a pas de photo, son prénom sera affiché à la place.</p>
                         </td>
                     </tr>
                     <tr>
@@ -2492,6 +2535,29 @@ jQuery(document).ready(function($) {
     .ribbon:after {
         border-top-color: {$ribbon_colors['corners']};
     }
+    .teacher-name-wrapper {
+        position: absolute;
+        bottom: 5px;
+        right: 8px;
+        font-size: 0.9em;
+        font-weight: 500;
+        background: rgba(0,0,0,0.2);
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+    .teacher-photo-wrapper.with-name {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        position: absolute;
+        bottom: 3px;
+        right: 5px;
+        z-index: 20;
+    }
+    .teacher-photo-wrapper.with-name .teacher-firstname-label {
+        font-size: 0.9em;
+        font-weight: 500;
+    }
     ";
 
     wp_add_inline_style('planning-danse-styles', $css);
@@ -2921,6 +2987,7 @@ jQuery(document).ready(function($) {
         }
         
         $teacherFirstname = null;
+        $teacherInfo = null;
         
         // Chercher le prénom du professeur dans le contenu
         foreach ($lines as $line) {
@@ -2974,35 +3041,65 @@ jQuery(document).ready(function($) {
                           </div>';
         }
     
-        // Ajouter la photo du professeur si un professeur a été trouvé
+        // Gérer l'affichage du professeur en fonction du réglage
         if ($teacherInfo) {
-            $photo_url = esc_url($teacherInfo['photo_url']);
+            $teacher_display_style = get_option('planning_teacher_display_style', 'photo');
+            $has_photo = !empty($teacherInfo['photo_url']);
+            $photo_url = $has_photo ? esc_url($teacherInfo['photo_url']) : '';
             $profile_url = esc_url($teacherInfo['profile_url']);
+            $firstname = esc_html($teacherInfo['firstname']);
             $full_name = esc_html($teacherInfo['firstname'] . ' ' . $teacherInfo['lastname']);
-            
-            $teacher_html = '<div class="teacher-photo-wrapper">';
-            // Sur desktop, le lien est actif, sur mobile il est désactivé
-            $teacher_html .= '<div class="teacher-link' . ($profile_url ? ' has-profile' : '') . '">';
-            $teacher_html .= '<img src="' . $photo_url . '" alt="' . $full_name . '" class="teacher-photo">';
-            
-            // Ajout du tooltip enrichi
-            $teacher_html .= '<div class="teacher-tooltip">';
-            $teacher_html .= '<div class="teacher-tooltip-content">';
-            $teacher_html .= '<img src="' . $photo_url . '" alt="' . $full_name . '" class="teacher-tooltip-photo">';
-            $teacher_html .= '<div class="teacher-tooltip-info">';
-            $teacher_html .= '<div class="teacher-tooltip-name">' . $full_name . '</div>';
-            if ($profile_url) {
-                $teacher_html .= '<a href="' . $profile_url . '" class="teacher-profile-link">Voir le profil</a>';
+            $teacher_html = '';
+
+            // Si un affichage avec photo est demandé mais qu'il n'y en a pas, on affiche le prénom
+            if (!$has_photo && ($teacher_display_style === 'photo' || $teacher_display_style === 'photo_firstname')) {
+                $teacher_display_style = 'firstname';
             }
-            $teacher_html .= '</div>'; // .teacher-tooltip-info
-            $teacher_html .= '</div>'; // .teacher-tooltip-content
-            $teacher_html .= '</div>'; // .teacher-tooltip
-            
-            $teacher_html .= '</div>'; // .teacher-link
-            $teacher_html .= '</div>'; // .teacher-photo-wrapper
-            
+
+            switch ($teacher_display_style) {
+                case 'photo':
+                    $teacher_html = '<div class="teacher-photo-wrapper">';
+                    $teacher_html .= '<div class="teacher-link' . ($profile_url ? ' has-profile' : '') . '">';
+                    $teacher_html .= '<img src="' . $photo_url . '" alt="' . $full_name . '" class="teacher-photo">';
+                    $teacher_html .= '<div class="teacher-tooltip">';
+                    $teacher_html .= '<div class="teacher-tooltip-content">';
+                    $teacher_html .= '<img src="' . $photo_url . '" alt="' . $full_name . '" class="teacher-tooltip-photo">';
+                    $teacher_html .= '<div class="teacher-tooltip-info">';
+                    $teacher_html .= '<div class="teacher-tooltip-name">' . $full_name . '</div>';
+                    if ($profile_url) {
+                        $teacher_html .= '<a href="' . $profile_url . '" class="teacher-profile-link">Voir le profil</a>';
+                    }
+                    $teacher_html .= '</div></div></div></div></div>';
+                    break;
+
+                case 'firstname':
+                    $teacher_html = '<div class="teacher-name-wrapper">' . $firstname . '</div>';
+                    break;
+
+                case 'fullname':
+                    $teacher_html = '<div class="teacher-name-wrapper">' . $full_name . '</div>';
+                    break;
+
+                case 'photo_firstname':
+                    $teacher_html = '<div class="teacher-photo-wrapper with-name">';
+                    $teacher_html .= '<div class="teacher-link' . ($profile_url ? ' has-profile' : '') . '">';
+                    $teacher_html .= '<img src="' . $photo_url . '" alt="' . $full_name . '" class="teacher-photo">';
+                    $teacher_html .= '<div class="teacher-tooltip">';
+                    $teacher_html .= '<div class="teacher-tooltip-content">';
+                    $teacher_html .= '<img src="' . $photo_url . '" alt="' . $full_name . '" class="teacher-tooltip-photo">';
+                    $teacher_html .= '<div class="teacher-tooltip-info">';
+                    $teacher_html .= '<div class="teacher-tooltip-name">' . $full_name . '</div>';
+                    if ($profile_url) {
+                        $teacher_html .= '<a href="' . $profile_url . '" class="teacher-profile-link">Voir le profil</a>';
+                    }
+                    $teacher_html .= '</div></div></div></div>';
+                    $teacher_html .= '<span class="teacher-firstname-label">' . $firstname . '</span>';
+                    $teacher_html .= '</div>';
+                    break;
+            }
             $formatted .= $teacher_html;
         }
+
         // Vérifier la période de réservation
         $start = get_option('booking_period_start');
         $end = get_option('booking_period_end');
@@ -3133,3 +3230,4 @@ jQuery(document).ready(function($) {
 
 // Initialisation du plugin
 new PlanningDansePlugin();
+
