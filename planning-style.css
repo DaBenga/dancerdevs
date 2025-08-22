@@ -1,5 +1,5 @@
 /* Base styles */
-.planning-danse-plugin-wrapper :root {
+.planning-danse-plugin-wrapper {
     --collumn-width: 200px;
     --time-collumn-width: 40px;
     --planning-min-width: 1800px;
