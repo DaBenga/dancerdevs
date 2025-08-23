@@ -42,6 +42,7 @@
     font-size: 0.9em;
     letter-spacing: 0.5px;
     color: #ffffff !important;
+    border: none;
     transition: background-color: 0.3s ease;
 }
 
@@ -103,7 +104,7 @@
 .planning-danse-plugin-wrapper .planning-table th:not(.studio-row-first),
 .planning-danse-plugin-wrapper .planning-table td:not(.time-cell) {
     width: var(--collumn-width) !important;
-    min-width: var(--collumn-width) ;
+    min-width: var(--collumn-width);
 }
 
 .planning-danse-plugin-wrapper .planning-table .time-cell, 
@@ -496,6 +497,7 @@
     justify-content: center;
     gap: 8px;
     flex-wrap: wrap;
+    
 }
 
 .planning-danse-plugin-wrapper .category-filter {
@@ -510,7 +512,8 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    max-width: 200px;
+    min-width: 250px;
+    max-width: 250px;
    
 }
 
@@ -874,7 +877,7 @@
 
 .planning-danse-plugin-wrapper .selected-course {
     position: relative;
-    line-height:0.2;
+    line-height:0.9;
     padding: 10px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -982,9 +985,12 @@
     .planning-danse-plugin-wrapper .filter-group {
         justify-content: center;
         gap: 8px;
+        
+        
     }
     .planning-danse-plugin-wrapper .category-filter {
         min-width: 180px;
+        
        
     }
     .planning-danse-plugin-wrapper .planning-body{
@@ -1000,6 +1006,7 @@
 @media screen and (max-width: 1024px) {
     .planning-danse-plugin-wrapper .planning-table {
         font-size: 0.8m;
+        
     }
     .planning-danse-plugin-wrapper .teacher-photo {
         width: 20px;
@@ -1073,7 +1080,7 @@
 
     .planning-danse-plugin-wrapper .category-filter {
         padding: 6px 8px;
-        font-size: 0.8em;
+       
         min-width: unset;
         width: 100%;
         white-space: nowrap;
@@ -1082,6 +1089,7 @@
         background-size: 12px;
         background-position: right 5px center;
         padding-right: 20px;
+        max-width:none;
     }
 
     .planning-danse-plugin-wrapper .course {
@@ -1184,6 +1192,7 @@
 @media screen and (max-width: 380px) {
     .planning-danse-plugin-wrapper .filter-group {
         grid-template-columns: 1fr;
+        
     }
     
     .planning-danse-plugin-wrapper .planning-container {
