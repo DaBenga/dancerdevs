@@ -11,10 +11,15 @@ function extractTitle(content) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    const pluginWrapper = document.querySelector('.planning-danse-plugin-wrapper');
+    if (!pluginWrapper) {
+        // Si le plugin n'est pas sur la page, on ne fait rien.
+        return;
+    }
+
     const cart = {
         items: [],
         maxItems: 3,
-        
         
         // Nouvelle méthode pour extraire l'âge d'un cours
         getAgeCategory(courseTitle) {
@@ -51,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return { valid: true };
         },
         
-        
         addItem(course) {
             if (this.items.length >= this.maxItems) {
                 alert('Vous ne pouvez sélectionner que 3 cours maximum');
@@ -80,19 +84,20 @@ document.addEventListener('DOMContentLoaded', function() {
             this.items.push(course);
             this.updateDisplay();
             this.updateCartToggle();
-            document.querySelector('.booking-cart').classList.add('open');
+            const cartElement = pluginWrapper.querySelector('.booking-cart');
+            if(cartElement) cartElement.classList.add('open');
             return true;
         },
         
         updateDisplay() {
-            const container = document.querySelector('.cart-items');
+            const container = pluginWrapper.querySelector('.cart-items');
+            if(!container) return;
             container.innerHTML = '';
             
             this.items.forEach((item, index) => {
                 const courseTitle = extractTitle(item.title);
                 const category = courseTitle.trim().split(' ')[0].toLowerCase();
                 
-                // Extraction des informations complémentaires
                 const lines = item.title.split('\n');
                 const age = lines.find(l => 
                     l.toLowerCase().includes('adulte') || 
@@ -119,38 +124,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 container.appendChild(div);
             });
             
-            document.querySelector('.cart-total').textContent = 
-                `${this.items.length}/3 cours sélectionnés`;
+            const cartTotal = pluginWrapper.querySelector('.cart-total');
+            if(cartTotal) cartTotal.textContent = `${this.items.length}/3 cours sélectionnés`;
                 
-            const validateButton = document.querySelector('.validate-booking');
-            const ageValidation = this.validateAgeCompatibility();
-            validateButton.disabled = this.items.length === 0 || !ageValidation.valid;
-            if (!ageValidation.valid) {
-                validateButton.title = ageValidation.message;
-            } else {
-                validateButton.title = '';
+            const validateButton = pluginWrapper.querySelector('.validate-booking');
+            if(validateButton) {
+                const ageValidation = this.validateAgeCompatibility();
+                validateButton.disabled = this.items.length === 0 || !ageValidation.valid;
+                if (!ageValidation.valid) {
+                    validateButton.title = ageValidation.message;
+                } else {
+                    validateButton.title = '';
+                }
             }
             this.updateCartToggle();
-            
-            
         },
         
         updateCartToggle() {
-            const toggleBtn = document.querySelector('.booking-cart-toggle');
-            const cartCountDisplay = toggleBtn.querySelector('.cart-count');
+            const toggleBtn = pluginWrapper.querySelector('.booking-cart-toggle');
+            if(!toggleBtn) return;
+
+            let cartCountDisplay = toggleBtn.querySelector('.cart-count');
             
             if (!cartCountDisplay) {
                 const countSpan = document.createElement('span');
                 countSpan.className = 'cart-count';
                 toggleBtn.appendChild(countSpan);
+                cartCountDisplay = countSpan;
             }
             
-            const countElement = toggleBtn.querySelector('.cart-count');
-            if (countElement) {
-                countElement.textContent = this.items.length;
+            if (cartCountDisplay) {
+                cartCountDisplay.textContent = this.items.length;
             }
             
-            toggleBtn.style.display = document.querySelector('.booking-cart').classList.contains('open') ? 'none' : 'flex';
+            const cartElement = pluginWrapper.querySelector('.booking-cart');
+            if(cartElement) {
+               toggleBtn.style.display = cartElement.classList.contains('open') ? 'none' : 'flex';
+            }
         },
         
         removeItem(index) {
@@ -159,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.updateDisplay();
             this.updateCartToggle();
             
-            document.querySelectorAll('.book-trial.selected').forEach(button => {
+            pluginWrapper.querySelectorAll('.book-trial.selected').forEach(button => {
                 const buttonData = JSON.parse(button.dataset.course);
                 if (buttonData.title === removedItem.title && 
                     buttonData.day === removedItem.day && 
@@ -174,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.items = [];
             this.updateDisplay();
             this.updateCartToggle();
-            document.querySelectorAll('.book-trial.selected').forEach(button => {
+            pluginWrapper.querySelectorAll('.book-trial.selected').forEach(button => {
                 button.classList.remove('selected');
                 button.textContent = 'Essayer';
             });
@@ -182,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // Gestionnaire des boutons "Essayer"
-    document.addEventListener('click', function(e) {
+    pluginWrapper.addEventListener('click', function(e) {
         if (e.target.matches('.book-trial')) {
             const courseData = JSON.parse(e.target.dataset.course);
             if (cart.addItem(courseData)) {
@@ -197,123 +207,134 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Gestion du panier
-    document.querySelector('.booking-cart-toggle').addEventListener('click', function() {
-        const cart = document.querySelector('.booking-cart');
-        cart.classList.add('open');
-        this.style.display = 'none';
-    });
+    const toggleButton = pluginWrapper.querySelector('.booking-cart-toggle');
+    if (toggleButton) {
+        toggleButton.addEventListener('click', function() {
+            const cartEl = pluginWrapper.querySelector('.booking-cart');
+            if(cartEl) cartEl.classList.add('open');
+            this.style.display = 'none';
+        });
+    }
 
-    document.querySelector('.close-cart').addEventListener('click', function() {
-        const cart = document.querySelector('.booking-cart');
-        cart.classList.remove('open');
-        document.querySelector('.booking-cart-toggle').style.display = 'flex';
-    });
+    const closeButton = pluginWrapper.querySelector('.close-cart');
+    if(closeButton) {
+        closeButton.addEventListener('click', function() {
+            const cartEl = pluginWrapper.querySelector('.booking-cart');
+            const toggleBtn = pluginWrapper.querySelector('.booking-cart-toggle');
+            if(cartEl) cartEl.classList.remove('open');
+            if(toggleBtn) toggleBtn.style.display = 'flex';
+        });
+    }
 
     // Gestion du formulaire de réservation
-    document.querySelector('.validate-booking').addEventListener('click', function() {
-        const ageValidation = cart.validateAgeCompatibility();
-        if (!ageValidation.valid) {
-            alert(ageValidation.message);
-            return;
-        }
-        const modal = document.getElementById('booking-form-modal');
-        modal.style.display = 'block';
-        setTimeout(() => modal.classList.add('show'), 10);
-        
-        const recap = document.querySelector('.selected-courses');
-        recap.innerHTML = cart.items.map(item => {
-            const courseTitle = extractTitle(item.title);
-            const category = courseTitle.trim().split(' ')[0].toLowerCase();
+    const validateButton = pluginWrapper.querySelector('.validate-booking');
+    if (validateButton) {
+        validateButton.addEventListener('click', function() {
+            const ageValidation = cart.validateAgeCompatibility();
+            if (!ageValidation.valid) {
+                alert(ageValidation.message);
+                return;
+            }
+            const modal = pluginWrapper.querySelector('#booking-form-modal');
+            if(!modal) return;
+
+            modal.style.display = 'block';
+            setTimeout(() => modal.classList.add('show'), 10);
             
-            const lines = item.title.split('\n');
-            const age = lines.find(l => 
-                l.toLowerCase().includes('adulte') || 
-                l.toLowerCase().includes('enfant') || 
-                l.toLowerCase().includes('ado')
-            );
-            const hasNoSpectacle = lines.some(l => 
-                l.toLowerCase().includes('no spectacle')
-            );
-            
-            return `
-                <div class="selected-course cart-item-${category}">
-                    <h4>${courseTitle}</h4>
-                    <p>le ${item.day} ${item.time}</p>
-                    ${age ? `<p>Age : ${age}</p>` : ''}
-                    ${item.teacher ? `<p>Prof: ${item.teacher}</p>` : ''}
-                    ${hasNoSpectacle ? `<p class="no-spectacle-text">${window.planningSettings?.noSpectacleText || 'Cours non concerné par le spectacle'}</p>` : ''}
-                </div>
-            `;
-        }).join('');
-    });
+            const recap = modal.querySelector('.selected-courses');
+            recap.innerHTML = cart.items.map(item => {
+                const courseTitle = extractTitle(item.title);
+                const category = courseTitle.trim().split(' ')[0].toLowerCase();
+                
+                const lines = item.title.split('\n');
+                const age = lines.find(l => 
+                    l.toLowerCase().includes('adulte') || 
+                    l.toLowerCase().includes('enfant') || 
+                    l.toLowerCase().includes('ado')
+                );
+                const hasNoSpectacle = lines.some(l => 
+                    l.toLowerCase().includes('no spectacle')
+                );
+                
+                return `
+                    <div class="selected-course cart-item-${category}">
+                        <h4>${courseTitle}</h4>
+                        <p>le ${item.day} ${item.time}</p>
+                        ${age ? `<p>Age : ${age}</p>` : ''}
+                        ${item.teacher ? `<p>Prof: ${item.teacher}</p>` : ''}
+                        ${hasNoSpectacle ? `<p class="no-spectacle-text">${window.planningSettings?.noSpectacleText || 'Cours non concerné par le spectacle'}</p>` : ''}
+                    </div>
+                `;
+            }).join('');
+        });
+    }
     
     // Fermeture de la modal
-    window.addEventListener('click', function(e) {
-        const modal = document.getElementById('booking-form-modal');
-        if (e.target === modal) {
-            modal.classList.remove('show');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
-        }
-    });
+    const modal = pluginWrapper.querySelector('#booking-form-modal');
+    if (modal) {
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+        });
+    }
 
     // Soumission du formulaire
-    document.getElementById('trial-booking-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        const formValues = {};
-        formData.forEach((value, key) => {
-            formValues[key] = value;
-        });
-    
-        try {
-            const response = await fetch(planningAjax.ajaxurl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    action: 'submit_trial_booking',
-                    nonce: planningAjax.nonce,
-                    courses: JSON.stringify(cart.items),
-                    form: JSON.stringify(formValues)
-                })
-            });
+    const bookingForm = pluginWrapper.querySelector('#trial-booking-form');
+    if(bookingForm) {
+        bookingForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            if (response.ok) {
-                alert('Votre réservation a été envoyée avec succès !');
-                cart.clear();
-                document.getElementById('booking-form-modal').style.display = 'none';
-                document.querySelector('.booking-cart').classList.remove('open');
-            } else {
-                throw new Error('Erreur lors de l\'envoi');
+            const formData = new FormData(this);
+            const formValues = {};
+            formData.forEach((value, key) => {
+                formValues[key] = value;
+            });
+        
+            try {
+                const response = await fetch(planningAjax.ajaxurl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'submit_trial_booking',
+                        nonce: planningAjax.nonce,
+                        courses: JSON.stringify(cart.items),
+                        form: JSON.stringify(formValues)
+                    })
+                });
+                
+                if (response.ok) {
+                    alert('Votre réservation a été envoyée avec succès !');
+                    cart.clear();
+                    if(modal) modal.style.display = 'none';
+                    const cartEl = pluginWrapper.querySelector('.booking-cart');
+                    if(cartEl) cartEl.classList.remove('open');
+                } else {
+                    throw new Error('Erreur lors de l\'envoi');
+                }
+            } catch (error) {
+                alert('Une erreur est survenue lors de l\'envoi de votre réservation.');
             }
-        } catch (error) {
-            alert('Une erreur est survenue lors de l\'envoi de votre réservation.');
-        }
-    });
+        });
+    }
 
     // Initialisation du filtre des jours
     function initDaysFilter() {
-        const daysFilter = document.querySelector('.days-filter');
+        const daysFilter = pluginWrapper.querySelector('.days-filter');
         if (!daysFilter) return;
     
-        // Initialiser les états actifs
         const defaultActiveStates = {
-            'lundi': true,
-            'mardi': true,
-            'mercredi': true,
-            'jeudi': true,
-            'vendredi': true,
-            'samedi': true
+            'lundi': true, 'mardi': true, 'mercredi': true,
+            'jeudi': true, 'vendredi': true, 'samedi': true
         };
     
-        // Récupérer les états sauvegardés ou utiliser les valeurs par défaut
         let activeStates = JSON.parse(localStorage.getItem('planningDaysFilter')) || defaultActiveStates;
     
-        // S'assurer que tous les jours sont présents dans activeStates
         Object.keys(defaultActiveStates).forEach(day => {
             if (typeof activeStates[day] === 'undefined') {
                 activeStates[day] = true;
@@ -321,46 +342,40 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     
         function updateColumns() {
-        // On cible spécifiquement les cellules du planning, pas les boutons de filtre
-        const planningCells = document.querySelectorAll('.planning-table [data-day]');
-        
-        Object.entries(activeStates).forEach(([day, isActive]) => {
-            // Mise à jour des cellules du planning
-            planningCells.forEach(cell => {
-                if (cell.getAttribute('data-day') === day) {
-                    if (isActive) {
-                        cell.style.display = '';
-                        cell.classList.remove('hidden-day');
-                    } else {
-                        cell.style.display = 'none';
-                        cell.classList.add('hidden-day');
+            const planningCells = pluginWrapper.querySelectorAll('.planning-table [data-day]');
+            
+            Object.entries(activeStates).forEach(([day, isActive]) => {
+                planningCells.forEach(cell => {
+                    if (cell.getAttribute('data-day') === day) {
+                        if (isActive) {
+                            cell.style.display = '';
+                            cell.classList.remove('hidden-day');
+                        } else {
+                            cell.style.display = 'none';
+                            cell.classList.add('hidden-day');
+                        }
                     }
+                });
+                
+                const dayButton = pluginWrapper.querySelector(`.day-toggle[data-day="${day}"]`);
+                if (dayButton) {
+                    dayButton.classList.toggle('active', isActive);
                 }
             });
             
-            // Mise à jour des boutons (on change juste la classe, pas le display)
-            const dayButton = document.querySelector(`.day-toggle[data-day="${day}"]`);
-            if (dayButton) {
-                dayButton.classList.toggle('active', isActive);
-            }
-        });
-        
-        localStorage.setItem('planningDaysFilter', JSON.stringify(activeStates));
-    }
+            localStorage.setItem('planningDaysFilter', JSON.stringify(activeStates));
+        }
     
-        // Initialiser l'état des boutons
         daysFilter.querySelectorAll('.day-toggle').forEach(toggle => {
             const day = toggle.dataset.day;
             if (typeof activeStates[day] !== 'undefined') {
                 toggle.classList.toggle('active', activeStates[day]);
             } else {
-                // Si le jour n'existe pas dans activeStates, l'activer par défaut
                 activeStates[day] = true;
                 toggle.classList.add('active');
             }
         });
     
-        // Gestionnaire de clic
         daysFilter.addEventListener('click', (e) => {
             const toggle = e.target.closest('.day-toggle');
             if (!toggle) return;
@@ -369,7 +384,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const day = toggle.dataset.day;
             
-            // Empêcher la désactivation du dernier jour actif
             const activeCount = Object.values(activeStates).filter(Boolean).length;
             if (activeStates[day] && activeCount <= 1) {
                 alert('Au moins un jour doit rester visible');
@@ -382,7 +396,6 @@ document.addEventListener('DOMContentLoaded', function() {
             updateColumns();
         });
     
-        // Appliquer la configuration initiale
         updateColumns();
     }
 
