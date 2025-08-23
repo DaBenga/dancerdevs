@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Planning Danse En Mouvance
  * Description: Affiche le planning hebdomadaire des cours de danse depuis Google Sheets
- * Version: 1.7
+ * Version: 1.8
  * Author: Benga
  */
 
@@ -3140,12 +3140,19 @@ jQuery(document).ready(function($) {
 
     private function get_color_class($course_name) {
         $categories = get_option('planning_course_categories');
-        
-        // Récupérer le premier mot du contenu du cours
-        $first_word = strtok($course_name, " ");
+
+        // Sort categories by name length, descending, to match longer names first (e.g., "Modern Jazz" before "Jazz")
+        if (is_array($categories)) {
+            uasort($categories, function($a, $b) {
+                return strlen($b['name']) - strlen($a['name']);
+            });
+        } else {
+            $categories = [];
+        }
         
         foreach ($categories as $slug => $category) {
-            if (stripos($first_word, $category['name']) !== false) {
+            // Check if the category name exists anywhere in the course name, case-insensitive
+            if (isset($category['name']) && stripos($course_name, $category['name']) !== false) {
                 add_action('wp_footer', function() use ($slug, $category) {
                     echo "<style>.planning-danse-plugin-wrapper .course.$slug { background-color: {$category['bg']}; color: {$category['text']}; }</style>";
                 });
