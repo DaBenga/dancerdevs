@@ -1,6 +1,6 @@
 /* Base styles */
 .planning-danse-plugin-wrapper {
-    --collumn-width: 200px;
+    --collumn-width: 117px;
     --time-collumn-width: 40px;
     --planning-min-width: 1800px;
     --planning-min-width-768: 768px;
@@ -42,7 +42,7 @@
     font-size: 0.9em;
     letter-spacing: 0.5px;
     color: #ffffff !important;
-    transition: background-color 0.3s ease;
+    transition: background-color: 0.3s ease;
 }
 
 .planning-danse-plugin-wrapper .planning-table .days-row th{
@@ -86,7 +86,7 @@
 .planning-danse-plugin-wrapper .planning-table td {
     padding: 1px 5px !important;
     text-align: center;
-    transition: background-color 0.3s ease;
+    transition: background-color: 0.3s ease;
 }
 
 .planning-danse-plugin-wrapper .planning-table .time-cell {
@@ -99,6 +99,13 @@
     border:none !important;
 }
 
+.planning-danse-plugin-wrapper .planning-table th:not(.time-header),
+.planning-danse-plugin-wrapper .planning-table th:not(.studio-row-first),
+.planning-danse-plugin-wrapper .planning-table td:not(.time-cell) {
+    width: var(--collumn-width) !important;
+    min-width: var(--collumn-width) ;
+}
+
 .planning-danse-plugin-wrapper .planning-table .time-cell, 
 .planning-danse-plugin-wrapper .planning-table .studio-row-first, 
 .planning-danse-plugin-wrapper .planning-table .time-header {
@@ -108,11 +115,11 @@
     z-index: 2;
 }
 
-.planning-danse-plugin-wrapper .planning-table th:not(.time-header),
-.planning-danse-plugin-wrapper .planning-table td:not(.time-cell) {
-    width: var(--collumn-width) !important;
-    min-width: var(--collumn-width) !important;
-}
+
+
+
+
+
 
 .planning-danse-plugin-wrapper .planning-table .course {
     padding: 4px 6px !important;
@@ -124,7 +131,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     overflow: hidden;
-    font-size: 0.95em;
+    font-size: 0.8em;
     border:none !important;
     overflow: visible !important;
 }
@@ -172,12 +179,11 @@
 .planning-danse-plugin-wrapper .planning-table .course-line:first-child {
     font-weight: 600;
     font-size: 1em;
-    font-size: 0.95em;
 }
 
 .planning-danse-plugin-wrapper .planning-table .empty-cell {
     border:none !important;
-    transition: background-color 0.3s ease;
+    transition: background-color: 0.3s ease;
 }
 
 .planning-danse-plugin-wrapper .planning-table td.hidden-day,
@@ -219,7 +225,7 @@
 }
 
 .planning-danse-plugin-wrapper .ribbon {
-    font-size: 0.8em;
+    font-size: 0.7em;
     font-weight: bold;
     text-transform: lowercase;
     text-align: center;
@@ -492,18 +498,25 @@
 }
 
 .planning-danse-plugin-wrapper .category-filter {
-    padding: 8px 12px;
+    
     border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background-color: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    color: #ffffff !important; /* CORRECTION: Ajout de !important pour forcer la couleur du texte */
     font-size: 0.9em;
     cursor: pointer;
     transition: all 0.3s ease;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    min-width: 200px;
+    max-width: 200px;
+   
+}
+
+/* CORRECTION: Style pour les options dans le select */
+.planning-danse-plugin-wrapper .category-filter option {
+    background-color: #333;
+    color: #ffffff;
 }
 
 .planning-danse-plugin-wrapper .category-filter:hover {
@@ -805,7 +818,7 @@
     width: 100%;
     margin-top:10px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color: 0.2s;
 }
 
 .planning-danse-plugin-wrapper .validate-booking:hover {
@@ -939,7 +952,7 @@
     padding: 12px 25px;
     font-size: 15px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color: 0.2s;
 }
 
 .planning-danse-plugin-wrapper .modal-content button[type="submit"]:hover {
@@ -971,6 +984,7 @@
     }
     .planning-danse-plugin-wrapper .category-filter {
         min-width: 180px;
+       
     }
     .planning-danse-plugin-wrapper .planning-body{
          margin-top: 10px; 
@@ -984,7 +998,7 @@
 
 @media screen and (max-width: 1024px) {
     .planning-danse-plugin-wrapper .planning-table {
-        font-size: 14px;
+        font-size: 0.8m;
     }
     .planning-danse-plugin-wrapper .teacher-photo {
         width: 20px;
@@ -1019,7 +1033,7 @@
     }
     
     .planning-danse-plugin-wrapper .planning-table {
-        font-size: 12px;
+        font-size: 0.8em;
     }
 
     .planning-danse-plugin-wrapper .planning-table .header-table,
@@ -1047,6 +1061,7 @@
     
     .planning-danse-plugin-wrapper .planning-filters {
         padding: 5px;
+         
     }
 
     .planning-danse-plugin-wrapper .filter-group {
@@ -1071,7 +1086,7 @@
     .planning-danse-plugin-wrapper .course {
         height: 100%;
         padding: 4px 3px !important;
-        font-size: 11px;
+        font-size: 0.8em;
         white-space: normal !important;
     }
     
@@ -1091,7 +1106,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        font-size: 14px;
+        font-size: 0.8em;
         backdrop-filter: blur(5px);
         animation: fadeIn 0.5s ease-out;
         z-index: 3;
@@ -1128,7 +1143,7 @@
     }
 
     .planning-danse-plugin-wrapper .no-spectacle-icon:before {
-        font-size: 10px;
+        font-size: 0.8em;
         padding: 6px 10px;
         white-space: normal;
         max-width: 200px;
@@ -1175,7 +1190,7 @@
     }
 
     .planning-danse-plugin-wrapper .category-filter {
-        font-size: 0.75em;
+        font-size: 0.8em;
         padding: 5px 6px;
     }
    
