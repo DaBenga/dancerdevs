@@ -176,7 +176,8 @@
     z-index: 1;
 }
 
-.planning-danse-plugin-wrapper .planning-table .course-line:first-child {
+.planning-danse-plugin-wrapper .planning-table .course > .course-line:first-child,
+.planning-danse-plugin-wrapper .planning-table .course > .ribbon-wrapper + .course-line {
     font-weight: 600;
     font-size: 1em;
 }
